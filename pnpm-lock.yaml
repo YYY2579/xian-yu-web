@@ -171,6 +171,9 @@ importers:
       '@prisma/client':
         specifier: ^7.9.1
         version: 7.9.1(prisma@7.9.1(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(typescript@7.0.2))(typescript@7.0.2)
+      '@xianyu/pricing-engine':
+        specifier: workspace:*
+        version: link:../pricing-engine
       pg:
         specifier: ^8.22.0
         version: 8.22.0

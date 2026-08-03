@@ -11,6 +11,8 @@ export type {
 } from '@prisma/client';
 export type { CreateAuditInput } from './repositories/audit.repository';
 export { AuditRepository } from './repositories/audit.repository';
+export type { ComparablePriceQuery } from './repositories/baseline.repository';
+export { BaselineRepository } from './repositories/baseline.repository';
 export type {
   CreateMonitorInput,
   Paged,

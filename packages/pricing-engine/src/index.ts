@@ -1,3 +1,10 @@
+export type { BaselineResult, BaselineStatus } from './baseline/baseline-calculator';
+export {
+  BASELINE_RULE_VERSION,
+  calculateBaseline,
+  DEFAULT_MIN_SAMPLE_SIZE,
+  DEFAULT_SAMPLE_DAYS,
+} from './baseline/baseline-calculator';
 export type { NonTradeCategory } from './dictionaries/excluded-terms';
 export {
   NON_TRADE_CATEGORIES,
