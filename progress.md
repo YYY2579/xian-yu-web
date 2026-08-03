@@ -76,3 +76,6 @@
 - 执行 PROC-004「实现价格历史写入与事件幂等」完成：
   - ProductObservedEvent 契约；PriceHistoryHandler（source_event_id 幂等写入 + 观察事件产出，幂等即补偿策略）。
   - 5 个集成测试全绿（幂等/不同价格时间/批量/失败回滚）；processor-worker vitest 串行；五连全绿；提交 `4902ef3` 已推送。
+- 执行 PROC-005「实现清洗 Worker 队列处理」完成：
+  - queue 包新增 RabbitMq 封装（amqplib 2.x：队列+死信声明/持久发布/ACK-NACK/consumer 取消）；processor 新增 ProductEventHandler 编排（normalize→过滤→去重→价格历史→observed）。
+  - 集成测试：processor 26/26、queue 7/7（RabbitMQ docker 全链路/requeue/死信）；CI 补 RabbitMQ；五连全绿；提交 `071289c` 已推送。
