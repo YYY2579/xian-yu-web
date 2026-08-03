@@ -79,3 +79,7 @@
 - 执行 PROC-005「实现清洗 Worker 队列处理」完成：
   - queue 包新增 RabbitMq 封装（amqplib 2.x：队列+死信声明/持久发布/ACK-NACK/consumer 取消）；processor 新增 ProductEventHandler 编排（normalize→过滤→去重→价格历史→observed）。
   - 集成测试：processor 26/26、queue 7/7（RabbitMQ docker 全链路/requeue/死信）；CI 补 RabbitMQ；五连全绿；提交 `071289c` 已推送。
+- 执行 DB-005「完成数据库索引、迁移和种子策略」完成：
+  - scripts/migrate.ts（幂等 deploy+generate，Node 24 直跑）+ scripts/seed.ts（测试种子，环境守卫仅 test/development）；package.json db:migrate/db:seed。
+  - pg_trgm 扩展 + products.normalized_title GIN 索引迁移。
+  - docs/runbooks/database.md；验证：空库从零迁移（8 表/5 迁移）、升级幂等、索引存在、种子守卫；提交 `26b9c56` 已推送。
