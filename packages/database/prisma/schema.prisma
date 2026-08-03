@@ -78,3 +78,51 @@ model KeywordMonitor {
   @@index([normalizedKeyword], map: "idx_monitors_normalized_keyword")
   @@map("keyword_monitors")
 }
+
+/// 商品主记录（5.3 products 表）
+/// canonical_key（source + source_product_id）唯一，保证重复采集不建第二条主记录；
+/// raw_payload 为数据源原始载荷，默认查询不返回（访问边界）。
+/// 金额一律整数分（currentPriceCent）。
+model Product {
+  id               String                @id @default(uuid()) @db.Uuid
+  source           String
+  sourceProductId  String                @map("source_product_id")
+  canonicalKey     String                @unique @map("canonical_key")
+  title            String
+  normalizedTitle  String                @map("normalized_title")
+  url              String
+  sellerIdHash     String?               @map("seller_id_hash")
+  currentPriceCent BigInt                @map("current_price_cent")
+  currency         String                @default("CNY")
+  condition        String?
+  location         String?
+  publishedAt      DateTime?             @map("published_at") @db.Timestamptz(6)
+  firstSeenAt      DateTime              @default(now()) @map("first_seen_at") @db.Timestamptz(6)
+  lastSeenAt       DateTime              @map("last_seen_at") @db.Timestamptz(6)
+  rawPayload       Json?                 @map("raw_payload")
+  createdAt        DateTime              @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt        DateTime              @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  priceHistory ProductPriceHistory[]
+
+  @@index([source, sourceProductId], map: "idx_products_source_prod")
+  @@map("products")
+}
+
+/// 商品价格历史（5.4 product_price_history 表）
+/// source_event_id 唯一 → 同一事件重复消费不产生重复历史行（幂等）。
+/// 按月分区预留：Phase 2（DB-005）按 observed_at Range 分区，此处先建索引。
+model ProductPriceHistory {
+  id              BigInt    @id @default(autoincrement())
+  productId       String    @map("product_id") @db.Uuid
+  product         Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+  priceCent       BigInt    @map("price_cent")
+  shippingFeeCent BigInt?   @map("shipping_fee_cent")
+  observedAt      DateTime  @map("observed_at") @db.Timestamptz(6)
+  sourceEventId   String?   @unique @map("source_event_id") @db.Uuid
+  createdAt       DateTime  @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@index([productId, observedAt(sort: Desc)], map: "idx_ph_product_observed")
+  @@index([observedAt], map: "idx_ph_observed_at")
+  @@map("product_price_history")
+}

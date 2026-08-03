@@ -31,12 +31,12 @@ describe('createLogger', () => {
     logger.info('hello', { user: 'alice' });
     logger.error('boom', { code: 500 });
 
-    const first = JSON.parse(lines[0]!) as Record<string, unknown>;
+    const first = JSON.parse(lines[0] ?? '') as Record<string, unknown>;
     expect(first.name).toBe('test-service');
     expect(first.level).toBe(30); // pino info
     expect(first.msg).toBe('hello');
     expect(first.user).toBe('alice');
-    const second = JSON.parse(lines[1]!) as Record<string, unknown>;
+    const second = JSON.parse(lines[1] ?? '') as Record<string, unknown>;
     expect(second.level).toBe(50); // pino error
     expect(second.msg).toBe('boom');
   });

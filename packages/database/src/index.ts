@@ -1,6 +1,12 @@
 import { PrismaClient } from '@prisma/client';
 
-export type { KeywordMonitor, MonitorStatus, User } from '@prisma/client';
+export type {
+  KeywordMonitor,
+  MonitorStatus,
+  Product,
+  ProductPriceHistory,
+  User,
+} from '@prisma/client';
 export type {
   CreateMonitorInput,
   Paged,
@@ -11,6 +17,13 @@ export {
   MonitorValidationError,
   normalizeKeyword,
 } from './repositories/monitor.repository';
+export type { RecordPriceInput } from './repositories/price-history.repository';
+export { PriceHistoryRepository } from './repositories/price-history.repository';
+export type {
+  ProductWithoutRawPayload,
+  UpsertProductInput,
+} from './repositories/product.repository';
+export { buildCanonicalKey, ProductRepository } from './repositories/product.repository';
 export type { CreateUserInput, UpdateUserInput } from './repositories/user.repository';
 export {
   createPrismaClient,
