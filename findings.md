@@ -93,3 +93,10 @@
 - **pino redact**：`redact: { paths, censor }` 支持 `**password**` 等通配路径，实现任意层级的敏感字段脱敏；`base: undefined` 可去掉默认 pid/hostname 保持精简。
 - **prom-client 15**：`new Counter({ registers: [registry] })` 方式共享 Registry；重复创建同名指标会抛错，需按名称缓存复用实例。
 - **traceparent**：W3C 格式 `00-<traceid>-<parentid>-<flags>`；MVP 用 16 位 hex traceId，解析时对更长 id 截断，接口后续可平滑迁移 OTel。
+
+### CI 工具链选型（FND-005）
+
+- **TS7（tsgo）与 typescript-eslint 的兼容性不明**，改用 **Biome 2.5（lint）**：独立 Rust 工具链，天然兼容 TS7；**Prettier（format）** 负责格式化，biome 需禁用 `formatter` 避免两套规则冲突。
+- **供应链风险实例**：npm 上 `biome@0.3.3` 是可疑包（依赖 core-js 2.x 老依赖，官方包名为 `@biomejs/biome`），已移除。**装新工具前先核对官方包名**。
+- **.mjs 是纯 JS**：不要写 TS 类型注解（Node 与 prettier 都会语法报错）。
+- **CI 集成测试**：embedded-postgres 提供 linux-x64 二进制（optionalDependencies 按平台装），ubuntu runner 可直接跑数据库集成测试；`git diff --exit-code` 步骤防止未提交的生成物。

@@ -42,3 +42,9 @@
 - 执行 FND-006「建立日志、健康检查和链路追踪基线」完成：
   - @xianyu/observability：JSON 日志（pino + 敏感字段全层级脱敏 + child 上下文 + level 过滤）、trace_id/request_id 与 W3C traceparent（预留 OTel 演进）、prom-client 指标（Prometheus 文本导出 + 业务指标清单）、健康检查（应用/依赖区分聚合）。
   - 依赖 pino ^10.3.1、prom-client ^15.1.3；11 个测试全绿，全仓 typecheck/test 退出码 0；提交 `1004be2` 已推送。
+- 执行 FND-005「建立 CI 基线」完成：
+  - Biome 2.5.6（lint）+ Prettier 3.9（format）分工（TS7 与 typescript-eslint 兼容性考量）；根 scripts lint/format/format:check。
+  - .github/workflows/ci.yml：pnpm 11.18 + node 24 锁定、frozen-lockfile、typecheck/lint/format:check/test/build 失败即阻断。
+  - embedded-pg.mjs 平台适配（darwin/linux/win32），CI(ubuntu) 集成测试可用。
+  - ⚠️ 供应链：npm `biome@0.3.3` 为可疑包（依赖 core-js 2.x）已移除，改用官方 `@biomejs/biome`。
+  - 本地五连验证退出码全 0；提交 `11ebdef` 已推送。
