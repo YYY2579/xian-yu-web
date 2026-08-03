@@ -20,4 +20,10 @@ export {
   rawProductEventSchema,
 } from './events/raw-product-event';
 export type { CollectorJob } from './jobs/collector-job';
+export type {
+  CreateMonitorRequest,
+  MonitorPage,
+  MonitorView,
+  UpdateMonitorRequest,
+} from './monitors/monitor.types';
 export type { NormalizedProduct } from './products/normalized-product';

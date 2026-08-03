@@ -191,4 +191,9 @@ export class MonitorRepository {
       take: Math.min(500, Math.max(1, Math.trunc(limit))),
     });
   }
+
+  /** 硬删除（API-003；关联通知/运行记录由 schema 级联删除） */
+  async remove(id: string): Promise<KeywordMonitor> {
+    return this.prisma.keywordMonitor.delete({ where: { id } });
+  }
 }
