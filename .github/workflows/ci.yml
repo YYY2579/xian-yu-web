@@ -41,8 +41,8 @@ jobs:
 
       - name: Unit & integration tests
         run: |
-          # scheduler 集成测试依赖 Redis（compose 提供）
-          docker compose -p xianyu up -d --wait redis
+          # scheduler 依赖 Redis、queue 依赖 RabbitMQ（compose 提供）
+          docker compose -p xianyu up -d --wait redis rabbitmq
           pnpm test
 
       - name: Build
