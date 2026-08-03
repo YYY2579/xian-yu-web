@@ -13,5 +13,11 @@
     "@types/node": "^26.1.2",
     "typescript": "^7.0.2",
     "vitest": "^4.1.10"
+  },
+  "dependencies": {
+    "@prisma/client": "^7.9.1",
+    "@xianyu/contracts": "workspace:*",
+    "@xianyu/database": "workspace:*",
+    "@xianyu/pricing-engine": "workspace:*"
   }
 }

@@ -25,6 +25,19 @@ importers:
         version: 4.1.10(@opentelemetry/api@1.9.1)(@types/node@26.1.2)(vite@8.2.0(@types/node@26.1.2)(jiti@2.7.0))
 
   apps/analyzer-worker:
+    dependencies:
+      '@prisma/client':
+        specifier: ^7.9.1
+        version: 7.9.1(prisma@7.9.1(@types/react@19.2.18)(react-dom@19.2.8(react@19.2.8))(react@19.2.8)(typescript@7.0.2))(typescript@7.0.2)
+      '@xianyu/contracts':
+        specifier: workspace:*
+        version: link:../../packages/contracts
+      '@xianyu/database':
+        specifier: workspace:*
+        version: link:../../packages/database
+      '@xianyu/pricing-engine':
+        specifier: workspace:*
+        version: link:../../packages/pricing-engine
     devDependencies:
       '@types/node':
         specifier: ^26.1.2
