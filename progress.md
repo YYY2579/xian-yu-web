@@ -102,3 +102,6 @@
 - 执行 PRI-003「实现商品事件匹配监控任务」完成：
   - LowPriceMatchEvent 契约；product-matcher（关键词匹配→基线→低价判定→可解释命中，未命中带原因）。
   - 集成测试 5 个；analyzer-worker 6/6；五连全绿；提交 `e5b3cfe` 已推送。
+- 执行 NTF-001「实现通知事件与模板」完成：
+  - NotificationCommand 契约；三渠道纯文本模板（TEMPLATE_VERSION=1，含原因/价格/链接）；NotifierService（幂等/偏好过滤/命令产出）。
+  - 集成测试 5 个；修复跨包共享测试库并行干扰（workspace 串行）+ beforeEach 清理；五连全绿；提交 `ecd689d` 已推送。
