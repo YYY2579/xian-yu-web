@@ -1,0 +1,27 @@
+# 依赖与构建产物
+node_modules/
+dist/
+coverage/
+*.tsbuildinfo
+.toolchain/
+
+# 环境与密钥（不得提交真实凭据）
+.env
+.env.*
+!.env.example
+*.storage-state.json
+runtime/
+
+# 浏览器采集与测试产物
+playwright-report/
+test-results/
+trace/
+screenshots/
+
+# 系统与日志
+.DS_Store
+*.log
+
+# 本地工具配置
+.reasonix/
+reasonix.toml
