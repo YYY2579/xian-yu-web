@@ -18,3 +18,9 @@ export type {
   NonTradeFilterResult,
 } from './filters/non-trade-filter';
 export { applyNonTradeFilter } from './filters/non-trade-filter';
+export {
+  DEFAULT_DISCOUNT_THRESHOLD,
+  evaluateLowPrice,
+  LOW_PRICE_RULE_VERSION,
+} from './rules/low-price-rule';
+export type { LowPriceDecision, LowPriceReason, LowPriceRuleInput } from './rules/rule-types';
