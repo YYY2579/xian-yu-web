@@ -23,6 +23,13 @@ enum PlanCode {
   ENTERPRISE
 }
 
+/// 监控任务状态：启用 / 暂停 / 异常
+enum MonitorStatus {
+  ACTIVE
+  PAUSED
+  ERROR
+}
+
 /// 用户（5.1 users 表）
 /// 密码只保存强哈希（passwordHash）；软删除用 deletedAt，查询层默认过滤。
 model User {
@@ -40,4 +47,34 @@ model User {
 
   @@index([planCode, status], map: "idx_users_plan_status")
   @@map("users")
+
+  monitors KeywordMonitor[]
+}
+
+/// 关键词监控任务（5.2 keyword_monitors 表）
+/// 金额一律整数分（targetPriceCent）；阈值用 DECIMAL(5,4)（如 0.7000）；
+/// 频率/阈值/样本量的范围校验在 Repository 层执行（配合数据库枚举约束）。
+model KeywordMonitor {
+  id                String         @id @default(uuid()) @db.Uuid
+  userId            String         @map("user_id") @db.Uuid
+  user              User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  keyword           String
+  normalizedKeyword String         @map("normalized_keyword")
+  categoryCode      String?        @map("category_code")
+  targetPriceCent   BigInt         @map("target_price_cent")
+  discountThreshold Decimal        @map("discount_threshold") @db.Decimal(5, 4)
+  minSampleSize     Int            @default(10) @map("min_sample_size")
+  frequencyMinutes  Int            @map("frequency_minutes")
+  filters           Json?
+  notifyChannels    Json?          @map("notify_channels")
+  status            MonitorStatus  @default(ACTIVE)
+  lastCollectedAt   DateTime?      @map("last_collected_at") @db.Timestamptz(6)
+  nextRunAt         DateTime?      @map("next_run_at") @db.Timestamptz(6)
+  createdAt         DateTime       @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt         DateTime       @updatedAt @map("updated_at") @db.Timestamptz(6)
+
+  @@index([userId, status], map: "idx_monitors_user_status")
+  @@index([status, nextRunAt], map: "idx_monitors_status_next_run")
+  @@index([normalizedKeyword], map: "idx_monitors_normalized_keyword")
+  @@map("keyword_monitors")
 }

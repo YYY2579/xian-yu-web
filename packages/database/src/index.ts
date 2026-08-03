@@ -2,7 +2,9 @@ import { PrismaClient } from '@prisma/client';
 
 export { UserRepository, EmailAlreadyExistsError, createPrismaClient } from './repositories/user.repository';
 export type { CreateUserInput, UpdateUserInput } from './repositories/user.repository';
-export type { User } from '@prisma/client';
+export { MonitorRepository, MonitorValidationError, normalizeKeyword } from './repositories/monitor.repository';
+export type { CreateMonitorInput, UpdateMonitorInput, Paged } from './repositories/monitor.repository';
+export type { User, KeywordMonitor, MonitorStatus } from '@prisma/client';
 
 /** 供测试/脚本便捷创建 client 的连接类型 */
 export type DatabaseUrl = string;
