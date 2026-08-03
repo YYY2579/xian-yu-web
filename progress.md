@@ -25,3 +25,8 @@
   - 新增 `.env.example`（仅占位符）与 `docs/runbooks/configuration.md`（Diátaxis Reference 风格）。
   - 验证：7 个契约测试全部通过，全仓 typecheck/test 退出码 0。
   - 依赖：zod ^4.4.3、dotenv ^17.4.2；提交 `df16b23` 已推送。
+- 执行 DB-001「建立用户与权限数据模型」完成：
+  - Prisma 7 schema：users 表（UUID 主键、email 唯一、password_hash、UserStatus/PlanCode 枚举、JSONB 偏好、TIMESTAMPTZ、软删除 deleted_at），迁移 `20260803030644_init_users` 生成并应用。
+  - UserRepository：CRUD、软删除过滤、重复邮箱→EmailAlreadyExistsError；`createPrismaClient` 工厂（Prisma 7 driver adapter）。
+  - PostgreSQL 本机方案落地：嵌入式 PG 16.4（embedded-postgres@16.4.0-beta.14），基建脚本 `packages/database/scripts/embedded-pg.mjs`（原生 initdb/pg_ctl，数据目录 /tmp/xianyu-pg，端口 55432）。
+  - 验证：7 个集成测试在真实 PG 16.4 全部通过，全仓 typecheck/test 退出码 0；提交 `a718c26` 已推送。

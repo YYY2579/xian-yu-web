@@ -56,3 +56,21 @@
 
 - `optional()` / `default()` 若写在 `z.preprocess(...)` **外层**，preprocess 把空串转 `undefined` 后，内部 schema 仍会报 "expected string, received undefined"。
 - 必须把 `optional()` / `default()` 放进 preprocess **内部**：`z.preprocess(emptyToUndefined, z.string().min(1).optional())`，空串与未设置才能都被豁免。
+
+### Prisma 7 关键变化（DB-001）
+
+- **schema 中 `datasource.url` 已移除**：连接串移到 `prisma.config.ts`（`defineConfig({ schema, datasource: { url: env('DATABASE_URL') } })`）；运行时 PrismaClient 必须传 driver adapter：`new PrismaClient({ adapter: new PrismaPg({ connectionString }) })`。
+- **类型入口**：`@prisma/client` 的类型经 `default.d.ts` → `.prisma/client/index` 链导出；`InputJsonValue` 只在 `Prisma` 命名空间内（`import { Prisma } from '@prisma/client'` 后 `Prisma.InputJsonValue`），顶层不可导入。
+- **错误判断**：Prisma 命名空间可能不可用，唯一约束等错误用鸭子类型判断（`'code' in err && err.code === 'P2002'`）。
+- **本地 PostgreSQL 方案**：本机无 docker/sudo 时用 `embedded-postgres@16.4.0-beta.14`（npm 二进制，版本由 npm tag 决定，无 Intel macOS 的 brew bottle）；其内置 `start()` 在本沙箱不可靠，改用**原生 initdb/pg_ctl**（脚本 `packages/database/scripts/embedded-pg.mjs`）；数据目录 `/tmp/xianyu-pg`、端口 55432、账号 postgres/postgres（trust 认证）。
+
+### pnpm 11 supply-chain 设置（DB-001）
+
+- `onlyBuiltDependencies` 已迁移为 **`allowBuilds`**（`pnpm-workspace.yaml` 顶层映射表）；Prisma/embedded-postgres 等需要 postinstall 的包必须显式 `true`。
+- **坑**：pnpm 检测到被忽略的 build 时会在 `pnpm-workspace.yaml` **自动追加占位块**（`set this to true or false`），导致 YAML 重复键报错；需手动清理占位块。
+- `pnpm approve-builds` 需交互，非交互环境不可用。
+
+### 沙箱补充约束（DB-001）
+
+- `ps` / `pgrep` 被沙箱禁止（Operation not permitted）；进程诊断改用 `lsof`（可用）与端口 `net.connect` 探测。
+- CJS 编译目标下 tsc 禁止 `import.meta`（TS1470）；vitest 测试定位包根用 `process.cwd()`。
