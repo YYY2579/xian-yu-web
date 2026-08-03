@@ -70,7 +70,7 @@ describe('MonitorRepository.create', () => {
     expect(m.frequencyMinutes).toBe(30);
     expect(m.status).toBe('ACTIVE');
     expect(m.nextRunAt).not.toBeNull();
-    expect(m.nextRunAt!.getTime()).toBeGreaterThan(Date.now());
+    expect(m.nextRunAt?.getTime() ?? 0).toBeGreaterThan(Date.now());
   });
 
   it('频率/阈值/样本量/金额范围校验', async () => {
@@ -150,10 +150,10 @@ describe('MonitorRepository 状态与更新', () => {
     const paused = await repo.pause(m.id);
     expect(paused.status).toBe('PAUSED');
 
-    const oldNextRun = paused.nextRunAt!.getTime();
+    const oldNextRun = paused.nextRunAt?.getTime() ?? 0;
     const resumed = await repo.resume(m.id);
     expect(resumed.status).toBe('ACTIVE');
-    expect(resumed.nextRunAt!.getTime()).toBeGreaterThan(oldNextRun);
+    expect(resumed.nextRunAt?.getTime() ?? 0).toBeGreaterThan(oldNextRun);
   });
 
   it('update 修改字段并重算 normalizedKeyword', async () => {

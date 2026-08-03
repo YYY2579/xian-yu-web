@@ -12,7 +12,6 @@ import { SchedulerService } from './scheduler.service';
 const PG_PORT = 55432;
 const PG_DB = 'xianyu_test';
 const DATABASE_URL = `postgres://postgres:postgres@localhost:${PG_PORT}/${PG_DB}`;
-const REDIS_URL = 'redis://localhost:6379';
 const REDIS_PASSWORD = 'xianyu_dev_redis';
 
 let redis: Redis;

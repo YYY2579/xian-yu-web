@@ -1,4 +1,4 @@
-import { randomBytes, randomUUID } from 'crypto';
+import { randomBytes, randomUUID } from 'node:crypto';
 
 /**
  * 链路追踪上下文（FND-006）
@@ -41,8 +41,6 @@ export function deriveTraceContext(
   parent?: TraceContext | { traceId?: string } | null,
 ): TraceContext {
   const traceId =
-    parent && parent.traceId && /^[0-9a-f]{16}$/.test(parent.traceId)
-      ? parent.traceId
-      : generateTraceId();
+    parent?.traceId && /^[0-9a-f]{16}$/.test(parent.traceId) ? parent.traceId : generateTraceId();
   return { requestId: randomUUID(), traceId };
 }

@@ -106,7 +106,7 @@ describe('端到端：样本 -> 市场价基线', () => {
     for (let i = 0; i < prices.length; i++) {
       await seedProduct(
         'iphone 15 pro',
-        BigInt(prices[i]!),
+        BigInt(prices[i] ?? 0),
         new Date(now - (i + 1) * 3600_000),
         `e${i}`,
       );

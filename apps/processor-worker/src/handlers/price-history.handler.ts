@@ -1,3 +1,4 @@
+import { randomUUID } from 'node:crypto';
 import {
   type NormalizedProduct,
   PRODUCT_OBSERVED_EVENT_SCHEMA_VERSION,
@@ -5,7 +6,6 @@ import {
   type RawProductEvent,
 } from '@xianyu/contracts';
 import type { PriceHistoryRepository, ProductRepository } from '@xianyu/database';
-import { randomUUID } from 'crypto';
 
 /**
  * 价格历史写入 handler（PROC-004）

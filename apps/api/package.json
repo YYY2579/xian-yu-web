@@ -11,6 +11,7 @@
   },
   "devDependencies": {
     "@nestjs/testing": "^11.1.28",
+    "@types/bcryptjs": "^3.0.0",
     "@types/express": "^5.0.6",
     "@types/node": "^26.1.2",
     "@types/supertest": "^7.2.1",
@@ -21,13 +22,18 @@
   "dependencies": {
     "@nestjs/common": "^11.1.28",
     "@nestjs/core": "^11.1.28",
+    "@nestjs/jwt": "^11.0.2",
     "@nestjs/platform-express": "^11.1.28",
     "@nestjs/swagger": "^11.1.0",
     "@xianyu/config": "workspace:*",
     "@xianyu/database": "workspace:*",
     "@xianyu/observability": "workspace:*",
+    "bcryptjs": "^3.0.3",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.15.1",
     "ioredis": "^6.0.0",
     "reflect-metadata": "^0.2.2",
-    "rxjs": "^7.8.2"
+    "rxjs": "^7.8.2",
+    "@xianyu/contracts": "workspace:*"
   }
 }

@@ -9,6 +9,7 @@ import { AppModule } from './app.module';
 // 测试依赖：嵌入式 PostgreSQL（55432）+ docker Redis（6379）
 process.env.DATABASE_URL = 'postgres://postgres:postgres@localhost:55432/xianyu_test';
 process.env.REDIS_URL = 'redis://:xianyu_dev_redis@localhost:6379';
+process.env.JWT_SECRET = 'test-jwt-secret-for-api-001';
 
 const DB_PKG = path.resolve(process.cwd(), '../../packages/database');
 

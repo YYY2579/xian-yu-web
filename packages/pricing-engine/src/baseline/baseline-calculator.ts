@@ -35,8 +35,8 @@ function percentile(sorted: number[], p: number): number {
   const index = (sorted.length - 1) * p;
   const lo = Math.floor(index);
   const hi = Math.ceil(index);
-  if (lo === hi) return sorted[lo]!;
-  return sorted[lo]! + (sorted[hi]! - sorted[lo]!) * (index - lo);
+  if (lo === hi) return sorted[lo] ?? 0;
+  return (sorted[lo] ?? 0) + ((sorted[hi] ?? 0) - (sorted[lo] ?? 0)) * (index - lo);
 }
 
 export function calculateBaseline(

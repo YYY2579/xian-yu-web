@@ -1,5 +1,5 @@
 import amqp, { type Channel, type ChannelModel } from 'amqplib';
-import { deadLetterOf, QUEUE_TOPOLOGY, QueueName } from './topology';
+import { deadLetterOf, QUEUE_TOPOLOGY } from './topology';
 
 /**
  * RabbitMQ 封装（PROC-005 / queue 包）

@@ -1,4 +1,4 @@
-import { Writable } from 'stream';
+import { Writable } from 'node:stream';
 import { describe, expect, it } from 'vitest';
 import {
   aggregateHealth,
@@ -49,7 +49,7 @@ describe('createLogger', () => {
       password: 'super-secret',
       nested: { token: 'tok-123', cookie: 'sid=abc', ok: true },
     });
-    const raw = lines[0]!;
+    const raw = lines[0] ?? '';
     expect(raw).not.toContain('super-secret');
     expect(raw).not.toContain('tok-123');
     expect(raw).not.toContain('sid=abc');
@@ -65,10 +65,10 @@ describe('createLogger', () => {
     const child = logger.child({ requestId: 'req-1', traceId: 'trace-1' });
     child.info('processing', { storageState: '{"cookie":"secret"}' });
 
-    const parsed = JSON.parse(lines[0]!) as Record<string, unknown>;
+    const parsed = JSON.parse(lines[0] ?? '') as Record<string, unknown>;
     expect(parsed.requestId).toBe('req-1');
     expect(parsed.traceId).toBe('trace-1');
-    expect(lines[0]!).not.toContain('secret');
+    expect(lines[0] ?? '').not.toContain('secret');
   });
 
   it('level 过滤生效', async () => {

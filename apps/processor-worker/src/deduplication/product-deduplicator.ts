@@ -1,6 +1,6 @@
+import { createHash } from 'node:crypto';
 import type { NormalizedProduct } from '@xianyu/contracts';
 import type { ProductRepository } from '@xianyu/database';
-import { createHash } from 'crypto';
 
 /**
  * 商品去重器（PROC-003）

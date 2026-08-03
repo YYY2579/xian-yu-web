@@ -1,6 +1,6 @@
+import { randomUUID } from 'node:crypto';
 import type { CollectorJob } from '@xianyu/contracts';
 import type { MonitorRepository } from '@xianyu/database';
-import { randomUUID } from 'crypto';
 import type { DistributedLock } from './locks';
 import type { QuotaManager } from './quota';
 

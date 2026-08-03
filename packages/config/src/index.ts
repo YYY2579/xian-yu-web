@@ -67,6 +67,9 @@ export const envSchema = z.object({
   DATASOURCE_AUTH_TOKEN: optStr,
   /** 授权会话 storageState 受控目录（必须位于 .gitignore 覆盖范围） */
   DATASOURCE_STORAGE_STATE_DIR: optStr,
+
+  /** JWT 签名密钥（API-002；生产必须注入强随机值） */
+  JWT_SECRET: optStr,
 });
 
 export type Config = z.infer<typeof envSchema>;

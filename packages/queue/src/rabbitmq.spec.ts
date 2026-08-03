@@ -91,7 +91,8 @@ describe('RabbitMq', () => {
       void (async () => {
         const tag = await mq.consume<Record<string, unknown>>(
           TEST_QUEUE,
-          async (message, _ack, nack) => {
+          async (_message, _ack, nack) => {
+            void _ack;
             await nack(false);
             resolve();
           },

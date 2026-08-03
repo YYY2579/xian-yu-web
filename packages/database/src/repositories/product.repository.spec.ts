@@ -166,7 +166,7 @@ describe('PriceHistoryRepository', () => {
 
     const all = await priceHistory.listByProduct(p.id);
     expect(all).toHaveLength(3);
-    expect(all[0]?.observedAt.getTime()).toBeGreaterThan(all[1]!.observedAt.getTime());
+    expect(all[0]?.observedAt.getTime() ?? 0).toBeGreaterThan(all[1]?.observedAt.getTime() ?? 0);
   });
 
   it('商品删除级联清理价格历史', async () => {

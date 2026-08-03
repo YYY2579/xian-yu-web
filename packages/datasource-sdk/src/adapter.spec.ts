@@ -44,8 +44,8 @@ describe('DatasourceAdapter 接口', () => {
     expect(result.source).toBe('mock-source');
     expect(result.query.keyword).toBe('iPhone 15 Pro');
     expect(result.products).toHaveLength(1);
-    expect(result.products[0]!.schema_version).toBe(1);
-    expect(result.products[0]!.monitor_id).toBe('m-1');
+    expect(result.products[0]?.schema_version).toBe(1);
+    expect(result.products[0]?.monitor_id).toBe('m-1');
     expect(Date.parse(result.collectedAt)).not.toBeNaN();
 
     const health = await adapter.healthCheck();

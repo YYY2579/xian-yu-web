@@ -1,3 +1,4 @@
+export type { LoginRequest, RegisterRequest, TokenPair, UserView } from './auth/auth.types';
 export {
   iphoneFixtureEvent,
   iphoneFixtureInput,

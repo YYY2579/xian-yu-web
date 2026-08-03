@@ -42,7 +42,7 @@ function findPgBin() {
   // 项目技术方案锁定 PostgreSQL 16，优先选择 16.4.0 包（其他版本为残留）
   const chosen = cands.find((n) => n.includes('16.4.0')) ?? cands[cands.length - 1];
   const bin = path.join(pnpmDir, chosen, 'node_modules/@embedded-postgres/darwin-x64/native/bin');
-  if (!existsSync(path.join(bin, 'pg_ctl'))) throw new Error('pg_ctl 缺失: ' + bin);
+  if (!existsSync(path.join(bin, 'pg_ctl'))) throw new Error(`pg_ctl 缺失: ${bin}`);
   return bin;
 }
 
