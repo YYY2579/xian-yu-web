@@ -34,3 +34,8 @@
   - KeywordMonitor 模型 + MonitorStatus 枚举，迁移 `20260803031321_add_keyword_monitors` 生成并应用（BIGINT 金额、DECIMAL(5,4) 阈值、JSONB 筛选、三索引、级联外键）。
   - MonitorRepository：create/update/pause/resume/listByUser 分页/findByDue 到期查询；频率/阈值/样本/金额范围校验；normalizeKeyword 归一化。
   - 集成测试 16/16（user 7 + monitor 9）；vitest `fileParallelism:false` 解决共享 DB 跨文件污染；提交 `c39e60f` 已推送。
+- 执行 COL-001「定义数据源适配器和领域事件契约」完成：
+  - RawProductEvent zod 契约（event_id/occurred_at/schema_version 三要素、金额整数分、带时区时间、seller_id_hash 脱敏、raw_payload 受限）；工厂 + 校验 + 版本演进断言；固定 fixtures。
+  - DatasourceAdapter 接口（只输出 RawProductEvent；DatasourceError 七类错误 + retryable 规则；healthCheck/close）；queue 拓扑（5 队列 + dlq + 生产者/消费者映射）。
+  - tsconfig.base.json 加 types:["node"]（TS7 需显式 @types）；contracts 构建后才可被 workspace 消费。
+  - 测试：contracts 7 + sdk 4 + queue 4 全绿，全仓 typecheck/test 退出码 0；提交 `a149a4c` 已推送。
