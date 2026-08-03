@@ -10,3 +10,5 @@ allowBuilds:
   'esbuild': true
   '@embedded-postgres/darwin-x64': true
   'embedded-postgres': true
+  '@scarf/scarf': false
+
