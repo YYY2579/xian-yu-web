@@ -39,6 +39,7 @@
 | 阶段 | 状态 | 说明 |
 |---|---|---|
 | 6. FND-002 初始化 Monorepo 与包边界 | completed | 2026-08-03 完成：骨架、依赖、三连验证、git 推送。详见 progress.md。 |
-| 7. 后续 P0 工单 | in_progress | 按 backlog 依赖推进：FND-003（配置契约）→ COL-001（事件契约）→ DB-001；EXT-001 授权到位前 COL-002 保持 Blocked。 |
+| 7. FND-003 建立配置与环境变量契约 | completed | 2026-08-03 完成：@xianyu/config schema 校验 + 脱敏 + .env.example + 运行手册，提交 df16b23。 |
+| 8. 后续 P0 工单 | in_progress | 依赖已满足的下一个：DB-001（用户与权限数据模型，依赖 FND-002/FND-003✅）或 COL-001（数据源适配器与事件契约，依赖 FND-001/FND-002✅）。EXT-001 授权到位前 COL-002 保持 Blocked。 |
 
 执行规则：一次一个工单；开始前先查代码、未提交改动与依赖；完成后跑 typecheck/test/build，并更新 progress.md / findings.md / task_plan.md。

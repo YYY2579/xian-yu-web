@@ -20,3 +20,8 @@
   - 工具链：brew 因 `/usr/local` 属 root 且 sudo 被禁不可行；bash 沙箱禁止写 HOME → node v24.18.1 + npm 11.16.0 + pnpm 11.18.0 安装至 workspace 内 `.toolchain/`（已 gitignore），npm/pnpm 状态经 `.toolchain/env.sh` 重定向。
   - 兼容修复：TS7 移除 `moduleResolution=Node`（改 NodeNext）；`outDir/rootDir` 改用 `${configDir}` 在子包 tsconfig 显式声明；vitest 4 纯 ESM → 每包 `vitest.config.ts` 限定 `src/**/*.spec.ts`。
   - Git：`git init -b main`，初始提交 `e1cc54f`（84 文件），已推送 `git@github.com:YYY2579/xian-yu-web.git`（origin/main）。
+- 执行 FND-003「建立配置与环境变量契约」完成：
+  - `@xianyu/config` 新增 zod schema：NODE_ENV 四环境、DATABASE_URL/REDIS_URL 必填、PORT/LOG_LEVEL 默认值、RabbitMQ/邮件/企业微信/数据源可选段；空字符串视为未设置；缺失/非法类型抛 `ConfigError` 并列出问题字段；`toSanitized()` 对 password/token/secret/url 字段脱敏。
+  - 新增 `.env.example`（仅占位符）与 `docs/runbooks/configuration.md`（Diátaxis Reference 风格）。
+  - 验证：7 个契约测试全部通过，全仓 typecheck/test 退出码 0。
+  - 依赖：zod ^4.4.3、dotenv ^17.4.2；提交 `df16b23` 已推送。

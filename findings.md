@@ -51,3 +51,8 @@
 - `outDir/rootDir` 相对「声明处 tsconfig」解析：基线里写 `outDir: dist` 会让产物全部落到根 `dist/` → 各子包 tsconfig 必须用 `${configDir}/src`、`${configDir}/dist` 显式覆盖。
 - vitest 4 为纯 ESM：CJS 产物（`dist/*.spec.js`）被默认匹配后会报 "cannot be imported in CommonJS" → 每包 `vitest.config.ts` 限定 `include: ['src/**/*.spec.ts']`。
 - 版本约定：node >=24（.nvmrc=24），packageManager `pnpm@11.18.0`。
+
+### zod 4 preprocess 嵌套坑（FND-003）
+
+- `optional()` / `default()` 若写在 `z.preprocess(...)` **外层**，preprocess 把空串转 `undefined` 后，内部 schema 仍会报 "expected string, received undefined"。
+- 必须把 `optional()` / `default()` 放进 preprocess **内部**：`z.preprocess(emptyToUndefined, z.string().min(1).optional())`，空串与未设置才能都被豁免。
