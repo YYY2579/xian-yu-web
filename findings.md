@@ -113,3 +113,9 @@
 - **null vs JsonNull**：Prisma JSON 字段不接受顶层 `null`（类型上需 `NullableJsonNullValueInput`）；清空 JSON 字段用 `Prisma.JsonNull`（SQL NULL），create/update 的 data 里要显式转换（`input.rawPayload ?? Prisma.JsonNull`）。
 - **Prisma 7 migrate dev 不自动重新 generate client**：schema 变更后必须手动 `prisma generate`，否则新模型访问器（`product`/`productPriceHistory`）不存在。
 - **Biome useNodejsImportProtocol**：强制 `node:` 前缀（`node:crypto`/`node:stream`）；TS7 在 `types:["node"]` 配置下可正确解析 `node:` 协议（此前 TS2591 是缺 types 配置所致）。
+
+### Docker 本机可用（FND-004 验收补充）
+
+- 沙箱环境检测不到 docker 不代表主机没有：本机 `/usr/local/bin/docker`（28.1.1）+ Compose v2.35.1 存在，daemon 未运行时用 `open -a Docker` 启动，约 5s 就绪。
+- **中文工作目录名导致 compose 默认项目名失败**（"project name must not be empty"）：必须显式 `docker compose -p <name>`（如 `-p xianyu`）。
+- 三服务健康检查/init.sql/Redis 密码认证/RabbitMQ 用户均验证通过；后续 Redis/RabbitMQ 相关工单（COL-003 等）可在本机验证。

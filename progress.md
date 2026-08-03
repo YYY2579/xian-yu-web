@@ -63,3 +63,4 @@
 - 执行 PROC-001「实现商品字段标准化解析器」完成：
   - contracts 新增 NormalizedProduct 类型（含审计保留字段）；processor-worker 新增 normalizer 纯函数（防御性拒绝/标题空白折叠+归一化/canonical_key/原始价格文本提取/warnings）。
   - 9 个单元测试全绿；五连验证通过；提交 `3f40710` 已推送。
+- 【补充】FND-004 本机验收完成：Docker daemon 启动（Docker Desktop 28.1.1，`open -a Docker` 触发）后 `docker compose -p xianyu up -d --wait` 三服务全部 healthy；init.sql 已建 xianyu_test；redis PONG；rabbitmq xianyu 管理员可用。docker 基建在本机可完整使用，解锁 Redis/RabbitMQ 相关工单验证。
