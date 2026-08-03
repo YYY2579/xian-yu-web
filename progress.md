@@ -105,3 +105,6 @@
 - 执行 NTF-001「实现通知事件与模板」完成：
   - NotificationCommand 契约；三渠道纯文本模板（TEMPLATE_VERSION=1，含原因/价格/链接）；NotifierService（幂等/偏好过滤/命令产出）。
   - 集成测试 5 个；修复跨包共享测试库并行干扰（workspace 串行）+ beforeEach 清理；五连全绿；提交 `ecd689d` 已推送。
+- 执行 API-004「实现商品、价格历史和通知查询」完成：
+  - 视图类型 + findByKeywordPaginated；products 模块（关键词分页/详情/价格历史）+ notifications（用户隔离）。
+  - 集成测试 4 个；api 23/23；五连全绿；提交 `e95cb3e` 已推送。
