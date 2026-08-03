@@ -47,3 +47,27 @@ jobs:
 
       - name: Verify no unexpected workspace changes
         run: git diff --exit-code
+
+  infra:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Start compose stack (wait for health)
+        run: docker compose up -d --wait
+
+      - name: All three services healthy
+        run: |
+          docker compose ps --format '{{.Name}} {{.Health}}'
+          test "$(docker compose ps --format '{{.Health}}' | grep -c healthy)" -eq 3
+
+      - name: PostgreSQL reachable
+        run: docker compose exec -T postgres pg_isready -U xianyu -d xianyu_dev
+
+      - name: Test database created by init.sql
+        run: docker compose exec -T postgres psql -U xianyu -d xianyu_dev -tAc "SELECT 1 FROM pg_database WHERE datname='xianyu_test'"
+
+      - name: Tear down
+        if: always()
+        run: docker compose down -v

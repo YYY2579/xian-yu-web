@@ -1,0 +1,68 @@
+# 闲鱼低价商品监控系统 - 本地开发基础设施（FND-004）
+# 用法：docker compose up -d --wait（等待全部健康）；docker compose down 停止
+# 密码通过 .env 覆盖（POSTGRES_PASSWORD / REDIS_PASSWORD / RABBITMQ_PASSWORD），
+# 未提供时使用下方开发默认值（仅限本地开发，禁止用于生产）。
+
+services:
+  postgres:
+    image: postgres:16
+    container_name: xianyu-postgres
+    environment:
+      POSTGRES_USER: xianyu
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-xianyu_dev_password}
+      POSTGRES_DB: xianyu_dev
+    ports:
+      - '5432:5432'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./infra/compose/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U xianyu -d xianyu_dev']
+      interval: 5s
+      timeout: 5s
+      retries: 12
+    restart: unless-stopped
+
+  redis:
+    image: redis:7
+    container_name: xianyu-redis
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-xianyu_dev_redis}
+    command: ['redis-server', '--appendonly', 'yes', '--requirepass', '${REDIS_PASSWORD:-xianyu_dev_redis}']
+    ports:
+      - '6379:6379'
+    volumes:
+      - redisdata:/data
+    healthcheck:
+      test: ['CMD-SHELL', 'redis-cli -a "$${REDIS_PASSWORD:-xianyu_dev_redis}" ping | grep PONG']
+      interval: 5s
+      timeout: 5s
+      retries: 12
+    restart: unless-stopped
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: xianyu-rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: xianyu
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:-xianyu_dev_rabbit}
+    ports:
+      - '5672:5672' # AMQP
+      - '15672:15672' # 管理台 http://localhost:15672
+    volumes:
+      - rabbitmqdata:/var/lib/rabbitmq
+    healthcheck:
+      test: ['CMD', 'rabbitmq-diagnostics', '-q', 'ping']
+      interval: 10s
+      timeout: 10s
+      retries: 12
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+  redisdata:
+  rabbitmqdata:
+
+networks:
+  default:
+    name: xianyu-dev

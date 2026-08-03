@@ -6,3 +6,7 @@ node_modules/
 pnpm-lock.yaml
 *.storage-state.json
 runtime/
+docker-compose.yml
+infra/
+*.yml
+*.yaml
