@@ -1,4 +1,4 @@
-import { RawProductEvent } from '@xianyu/contracts';
+import type { RawProductEvent } from '@xianyu/contracts';
 
 /**
  * 数据源适配器接口（COL-001 / ADR-005）

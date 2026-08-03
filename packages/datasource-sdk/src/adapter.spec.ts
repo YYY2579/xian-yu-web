@@ -1,13 +1,13 @@
+import { createRawProductEvent, iphoneFixtureInput, type RawProductEvent } from '@xianyu/contracts';
 import { describe, expect, it } from 'vitest';
-import { createRawProductEvent, RawProductEvent, iphoneFixtureInput } from '@xianyu/contracts';
 import {
-  DatasourceAdapter,
+  type DatasourceAdapter,
   DatasourceError,
   DEFAULT_SEARCH_LIMIT,
   DEFAULT_SEARCH_TIMEOUT_MS,
-  HealthStatus,
-  SearchQuery,
-  SearchResult,
+  type HealthStatus,
+  type SearchQuery,
+  type SearchResult,
 } from './index';
 
 /** mock 适配器：验证接口可被实现，且只输出 RawProductEvent */

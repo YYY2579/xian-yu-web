@@ -22,13 +22,24 @@ function findPnpmRoot() {
   }
 }
 
+/** 平台 -> @embedded-postgres/<suffix> 映射（darwin/linux/win32） */
+const PLATFORM_SUFFIX = {
+  darwin: { x64: 'darwin-x64', arm64: 'darwin-arm64' },
+  linux: { x64: 'linux-x64', arm64: 'linux-arm64' },
+  win32: { x64: 'win32-x64' },
+};
+
 function findPgBin() {
+  const suffix = PLATFORM_SUFFIX[process.platform]?.[process.arch];
+  if (!suffix) throw new Error(`不支持的平台: ${process.platform}-${process.arch}`);
   const pnpmDir = findPnpmRoot();
   const cands = readdirSync(pnpmDir)
-    .filter((n) => n.startsWith('@embedded-postgres+darwin-x64@'))
+    .filter((n) => n.startsWith(`@embedded-postgres+${suffix}@`))
     .sort();
-  if (cands.length === 0) throw new Error('未找到 @embedded-postgres 二进制，请安装 embedded-postgres');
-  // 项目技术方案锁定 PostgreSQL 16，优先选择 16.4.0 包（18 beta 为残留孤儿）
+  if (cands.length === 0) {
+    throw new Error(`未找到 @embedded-postgres 二进制（${suffix}），请安装 embedded-postgres`);
+  }
+  // 项目技术方案锁定 PostgreSQL 16，优先选择 16.4.0 包（其他版本为残留）
   const chosen = cands.find((n) => n.includes('16.4.0')) ?? cands[cands.length - 1];
   const bin = path.join(pnpmDir, chosen, 'node_modules/@embedded-postgres/darwin-x64/native/bin');
   if (!existsSync(path.join(bin, 'pg_ctl'))) throw new Error('pg_ctl 缺失: ' + bin);
@@ -65,7 +76,16 @@ async function main() {
     if (await isListening()) {
       console.log(`PostgreSQL 已在运行（端口 ${PORT}）`);
     } else {
-      run('pg_ctl', ['-D', PG_DIR, '-l', path.join(PG_DIR, 'pg.log'), '-o', `-p ${PORT}`, '-w', 'start']);
+      run('pg_ctl', [
+        '-D',
+        PG_DIR,
+        '-l',
+        path.join(PG_DIR, 'pg.log'),
+        '-o',
+        `-p ${PORT}`,
+        '-w',
+        'start',
+      ]);
       console.log(`PostgreSQL 已启动（端口 ${PORT}）`);
     }
     try {

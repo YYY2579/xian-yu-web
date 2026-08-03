@@ -1,7 +1,7 @@
 import { execFileSync } from 'node:child_process';
 import path from 'node:path';
+import type { PrismaClient } from '@prisma/client';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
-import { PrismaClient } from '@prisma/client';
 import { createPrismaClient, EmailAlreadyExistsError, UserRepository } from '../index';
 
 // pnpm 在包目录下运行 vitest，进程工作目录即包根
@@ -15,9 +15,13 @@ let repo: UserRepository;
 
 beforeAll(() => {
   // 1. 确保嵌入式 PostgreSQL 运行（已在运行则复用）
-  execFileSync(process.execPath, [path.join(PKG_ROOT, 'scripts/embedded-pg.mjs'), 'start', String(PORT), DB], {
-    stdio: 'ignore',
-  });
+  execFileSync(
+    process.execPath,
+    [path.join(PKG_ROOT, 'scripts/embedded-pg.mjs'), 'start', String(PORT), DB],
+    {
+      stdio: 'ignore',
+    },
+  );
   // 2. 应用迁移（幂等，未应用的才会执行）
   execFileSync('pnpm', ['exec', 'prisma', 'migrate', 'deploy'], {
     cwd: PKG_ROOT,

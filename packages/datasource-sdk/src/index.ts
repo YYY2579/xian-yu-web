@@ -1,9 +1,9 @@
-export { DatasourceError, DEFAULT_SEARCH_TIMEOUT_MS, DEFAULT_SEARCH_LIMIT } from './adapter';
 export type {
   DatasourceAdapter,
+  ErrorCategory,
+  HealthStatus,
+  SearchFilters,
   SearchQuery,
   SearchResult,
-  SearchFilters,
-  HealthStatus,
-  ErrorCategory,
 } from './adapter';
+export { DatasourceError, DEFAULT_SEARCH_LIMIT, DEFAULT_SEARCH_TIMEOUT_MS } from './adapter';

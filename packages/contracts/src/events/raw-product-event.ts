@@ -58,11 +58,13 @@ export const rawProductEventSchema = z.object({
 
 export type RawProductEvent = z.infer<typeof rawProductEventSchema>;
 
-export type RawProductEventInput = Omit<z.input<typeof rawProductEventSchema>, 'schema_version' | 'event_id' | 'occurred_at'>;
+export type RawProductEventInput = Omit<
+  z.input<typeof rawProductEventSchema>,
+  'schema_version' | 'event_id' | 'occurred_at'
+>;
 
 export type ParseResult =
-  | { success: true; data: RawProductEvent }
-  | { success: false; errors: string[] };
+  { success: true; data: RawProductEvent } | { success: false; errors: string[] };
 
 /**
  * 构造事件：自动生成 event_id（UUID v4）与 occurred_at（当前时间），

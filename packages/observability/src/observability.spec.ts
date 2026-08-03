@@ -7,8 +7,8 @@ import {
   dependencyCheck,
   deriveTraceContext,
   generateTraceId,
-  MetricsRegistry,
   MetricNames,
+  MetricsRegistry,
   parseTraceparent,
 } from './index';
 
@@ -91,7 +91,9 @@ describe('tracing', () => {
   });
 
   it('parseTraceparent 解析合法头部、拒绝非法', () => {
-    expect(parseTraceparent('00-0123456789abcdef0123456789abcdef-0000000000000001-01')?.traceId).toBe('0123456789abcdef');
+    expect(
+      parseTraceparent('00-0123456789abcdef0123456789abcdef-0000000000000001-01')?.traceId,
+    ).toBe('0123456789abcdef');
     expect(parseTraceparent('xx-invalid')).toBeNull();
     expect(parseTraceparent(undefined)).toBeNull();
     expect(parseTraceparent('01-0123456789abcdef0123456789abcdef-0000000000000001-01')).toBeNull(); // 非 00 版本

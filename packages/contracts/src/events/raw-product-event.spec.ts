@@ -11,7 +11,9 @@ import {
 describe('createRawProductEvent', () => {
   it('生成带 event_id/occurred_at/schema_version 的合法事件', () => {
     const event = createRawProductEvent(iphoneFixtureInput);
-    expect(event.event_id).toMatch(/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/);
+    expect(event.event_id).toMatch(
+      /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/,
+    );
     expect(event.schema_version).toBe(RAW_PRODUCT_EVENT_SCHEMA_VERSION);
     expect(Date.parse(event.occurred_at)).not.toBeNaN();
     expect(event.product.price_cent).toBe(5_999_00);

@@ -38,9 +38,34 @@ export type QueueSpec = {
 };
 
 export const QUEUE_TOPOLOGY: readonly QueueSpec[] = [
-  { queue: QUEUES.COLLECT_JOB, producer: 'scheduler', consumer: 'collector-worker', retryable: true },
-  { queue: QUEUES.RAW_PRODUCT_EVENT, producer: 'collector-worker', consumer: 'processor-worker', retryable: true },
-  { queue: QUEUES.PRODUCT_OBSERVED_EVENT, producer: 'processor-worker', consumer: 'analyzer-worker', retryable: true },
-  { queue: QUEUES.LOW_PRICE_DETECTED_EVENT, producer: 'analyzer-worker', consumer: 'notifier-worker', retryable: true },
-  { queue: QUEUES.NOTIFICATION_COMMAND, producer: 'notifier-worker', consumer: 'notifier-worker', retryable: true },
+  {
+    queue: QUEUES.COLLECT_JOB,
+    producer: 'scheduler',
+    consumer: 'collector-worker',
+    retryable: true,
+  },
+  {
+    queue: QUEUES.RAW_PRODUCT_EVENT,
+    producer: 'collector-worker',
+    consumer: 'processor-worker',
+    retryable: true,
+  },
+  {
+    queue: QUEUES.PRODUCT_OBSERVED_EVENT,
+    producer: 'processor-worker',
+    consumer: 'analyzer-worker',
+    retryable: true,
+  },
+  {
+    queue: QUEUES.LOW_PRICE_DETECTED_EVENT,
+    producer: 'analyzer-worker',
+    consumer: 'notifier-worker',
+    retryable: true,
+  },
+  {
+    queue: QUEUES.NOTIFICATION_COMMAND,
+    producer: 'notifier-worker',
+    consumer: 'notifier-worker',
+    retryable: true,
+  },
 ];

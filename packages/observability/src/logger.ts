@@ -1,4 +1,4 @@
-import { pino, type Logger as PinoLogger, type LoggerOptions } from 'pino';
+import { type LoggerOptions, type Logger as PinoLogger, pino } from 'pino';
 
 /**
  * JSON 结构化日志（FND-006）
@@ -46,16 +46,18 @@ export const SENSITIVE_PATHS = [
 
 export const REDACT_PLACEHOLDER = '[REDACTED]';
 
-function createPino(options: { name: string; level?: LogLevel; stream?: NodeJS.WritableStream }): PinoLogger {
+function createPino(options: {
+  name: string;
+  level?: LogLevel;
+  stream?: NodeJS.WritableStream;
+}): PinoLogger {
   const loggerOptions: LoggerOptions = {
     name: options.name,
     level: options.level ?? 'info',
     redact: { paths: SENSITIVE_PATHS, censor: REDACT_PLACEHOLDER },
     base: undefined, // 不输出默认 pid/hostname，保持精简
   };
-  return options.stream
-    ? pino(loggerOptions, options.stream)
-    : pino(loggerOptions);
+  return options.stream ? pino(loggerOptions, options.stream) : pino(loggerOptions);
 }
 
 function wrap(logger: PinoLogger): AppLogger {
@@ -69,6 +71,9 @@ function wrap(logger: PinoLogger): AppLogger {
 }
 
 /** 创建应用日志器；stream 用于测试捕获（默认 stdout） */
-export function createLogger(name: string, options?: { level?: LogLevel; stream?: NodeJS.WritableStream }): AppLogger {
+export function createLogger(
+  name: string,
+  options?: { level?: LogLevel; stream?: NodeJS.WritableStream },
+): AppLogger {
   return wrap(createPino({ name, level: options?.level, stream: options?.stream }));
 }

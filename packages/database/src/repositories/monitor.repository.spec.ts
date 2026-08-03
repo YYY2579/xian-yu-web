@@ -1,9 +1,9 @@
 import { execFileSync } from 'node:child_process';
 import path from 'node:path';
+import type { PrismaClient } from '@prisma/client';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
-import { PrismaClient } from '@prisma/client';
-import { createPrismaClient } from './user.repository';
 import { MonitorRepository, MonitorValidationError, normalizeKeyword } from './monitor.repository';
+import { createPrismaClient } from './user.repository';
 
 // pnpm 在包目录下运行 vitest，进程工作目录即包根
 const PKG_ROOT = process.cwd();
@@ -23,9 +23,13 @@ const baseInput = {
 };
 
 beforeAll(() => {
-  execFileSync(process.execPath, [path.join(PKG_ROOT, 'scripts/embedded-pg.mjs'), 'start', String(PORT), DB], {
-    stdio: 'ignore',
-  });
+  execFileSync(
+    process.execPath,
+    [path.join(PKG_ROOT, 'scripts/embedded-pg.mjs'), 'start', String(PORT), DB],
+    {
+      stdio: 'ignore',
+    },
+  );
   execFileSync('pnpm', ['exec', 'prisma', 'migrate', 'deploy'], {
     cwd: PKG_ROOT,
     env: { ...process.env, DATABASE_URL },
@@ -73,18 +77,18 @@ describe('MonitorRepository.create', () => {
     await expect(repo.create({ userId, ...baseInput, frequencyMinutes: 0 })).rejects.toBeInstanceOf(
       MonitorValidationError,
     );
-    await expect(repo.create({ userId, ...baseInput, frequencyMinutes: 10_081 })).rejects.toBeInstanceOf(
-      MonitorValidationError,
-    );
-    await expect(repo.create({ userId, ...baseInput, frequencyMinutes: 1.5 })).rejects.toBeInstanceOf(
-      MonitorValidationError,
-    );
-    await expect(repo.create({ userId, ...baseInput, targetPriceCent: -1n })).rejects.toBeInstanceOf(
-      MonitorValidationError,
-    );
-    await expect(repo.create({ userId, ...baseInput, discountThreshold: 1.5 })).rejects.toBeInstanceOf(
-      MonitorValidationError,
-    );
+    await expect(
+      repo.create({ userId, ...baseInput, frequencyMinutes: 10_081 }),
+    ).rejects.toBeInstanceOf(MonitorValidationError);
+    await expect(
+      repo.create({ userId, ...baseInput, frequencyMinutes: 1.5 }),
+    ).rejects.toBeInstanceOf(MonitorValidationError);
+    await expect(
+      repo.create({ userId, ...baseInput, targetPriceCent: -1n }),
+    ).rejects.toBeInstanceOf(MonitorValidationError);
+    await expect(
+      repo.create({ userId, ...baseInput, discountThreshold: 1.5 }),
+    ).rejects.toBeInstanceOf(MonitorValidationError);
     await expect(repo.create({ userId, ...baseInput, minSampleSize: 0 })).rejects.toBeInstanceOf(
       MonitorValidationError,
     );
@@ -102,7 +106,9 @@ describe('MonitorRepository 查询', () => {
     for (let i = 0; i < 3; i++) {
       await repo.create({ userId, ...baseInput, keyword: `Item ${i}` });
     }
-    const other = await prisma.user.create({ data: { email: 'other@example.com', passwordHash: 'h' } });
+    const other = await prisma.user.create({
+      data: { email: 'other@example.com', passwordHash: 'h' },
+    });
     await repo.create({ userId: other.id, ...baseInput, keyword: 'Other item' });
 
     const page1 = await repo.listByUser(userId, 1, 2);
@@ -119,7 +125,12 @@ describe('MonitorRepository 查询', () => {
 
   it('findByDue 只返回到期任务，PAUSED 不被选中', async () => {
     const due = new Date(Date.now() - 60_000);
-    const overdue = await repo.create({ userId, ...baseInput, keyword: 'Overdue', frequencyMinutes: 1 });
+    const overdue = await repo.create({
+      userId,
+      ...baseInput,
+      keyword: 'Overdue',
+      frequencyMinutes: 1,
+    });
     // 手动把 nextRunAt 改到过去
     await prisma.keywordMonitor.update({ where: { id: overdue.id }, data: { nextRunAt: due } });
     await repo.create({ userId, ...baseInput, keyword: 'Future' }); // nextRunAt 在未来
@@ -160,7 +171,11 @@ describe('MonitorRepository 状态与更新', () => {
 
   it('update 非法值报错', async () => {
     const m = await repo.create({ userId, ...baseInput });
-    await expect(repo.update(m.id, { frequencyMinutes: 0 })).rejects.toBeInstanceOf(MonitorValidationError);
-    await expect(repo.update(m.id, { keyword: '   ' })).rejects.toBeInstanceOf(MonitorValidationError);
+    await expect(repo.update(m.id, { frequencyMinutes: 0 })).rejects.toBeInstanceOf(
+      MonitorValidationError,
+    );
+    await expect(repo.update(m.id, { keyword: '   ' })).rejects.toBeInstanceOf(
+      MonitorValidationError,
+    );
   });
 });

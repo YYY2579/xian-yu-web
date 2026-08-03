@@ -46,7 +46,12 @@ describe('loadConfig', () => {
 
   it('空字符串视为未设置，不报错', () => {
     const cfg = loadConfig(
-      { ...baseEnv, RABBITMQ_URL: '', EMAIL_SMTP_PASSWORD: '', WECHAT_WEBHOOK_URL: '' } as NodeJS.ProcessEnv,
+      {
+        ...baseEnv,
+        RABBITMQ_URL: '',
+        EMAIL_SMTP_PASSWORD: '',
+        WECHAT_WEBHOOK_URL: '',
+      } as NodeJS.ProcessEnv,
       { loadDotEnv: false },
     );
     expect(cfg.RABBITMQ_URL).toBeUndefined();

@@ -1,5 +1,5 @@
-import { Prisma, PrismaClient, User } from '@prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
+import { type Prisma, PrismaClient, type User } from '@prisma/client';
 
 /**
  * 用户仓储（DB-001）

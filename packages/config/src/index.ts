@@ -13,11 +13,12 @@ import { applyDotenvFiles } from './env';
 /** 空字符串视为未设置，避免 .env 中残留的占位空值触发校验错误。 */
 const emptyToUndefined = (v: unknown): unknown => (v === '' ? undefined : v);
 
-const reqStr = (message: string) =>
-  z.preprocess(emptyToUndefined, z.string().min(1, { message }));
+const reqStr = (message: string) => z.preprocess(emptyToUndefined, z.string().min(1, { message }));
 const optStr = z.preprocess(emptyToUndefined, z.string().min(1).optional());
-const optNum = z
-  .preprocess(emptyToUndefined, z.coerce.number().int('must be an integer').positive('must be a positive integer').optional());
+const optNum = z.preprocess(
+  emptyToUndefined,
+  z.coerce.number().int('must be an integer').positive('must be a positive integer').optional(),
+);
 
 export const NODE_ENVS = ['development', 'test', 'staging', 'production'] as const;
 export type NodeEnv = (typeof NODE_ENVS)[number];
@@ -37,7 +38,11 @@ export const envSchema = z.object({
   /** API 监听端口（可选，默认 3000） */
   PORT: z.preprocess(
     emptyToUndefined,
-    z.coerce.number().int('must be an integer').positive('must be a positive integer').default(3000),
+    z.coerce
+      .number()
+      .int('must be an integer')
+      .positive('must be a positive integer')
+      .default(3000),
   ),
   /** 日志级别（可选，默认 info） */
   LOG_LEVEL: z.preprocess(emptyToUndefined, z.enum(LOG_LEVELS)).default('info'),
@@ -53,7 +58,10 @@ export const envSchema = z.object({
   EMAIL_FROM: optStr,
 
   /** 企业微信机器人（可选） */
-  WECHAT_WEBHOOK_URL: z.preprocess(emptyToUndefined, z.string().url('must be a valid URL').optional()),
+  WECHAT_WEBHOOK_URL: z.preprocess(
+    emptyToUndefined,
+    z.string().url('must be a valid URL').optional(),
+  ),
 
   /** 数据源授权（可选，EXT-001 授权到位后启用） */
   DATASOURCE_AUTH_TOKEN: optStr,
@@ -98,7 +106,10 @@ export interface LoadConfigOptions {
  * @param options 加载选项
  * @throws ConfigError 必填缺失或类型非法时
  */
-export function loadConfig(env: NodeJS.ProcessEnv = process.env, options: LoadConfigOptions = {}): Config {
+export function loadConfig(
+  env: NodeJS.ProcessEnv = process.env,
+  options: LoadConfigOptions = {},
+): Config {
   if (options.loadDotEnv !== false) {
     applyDotenvFiles(env.NODE_ENV);
   }

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { DEAD_LETTER_PREFIX, deadLetterOf, QUEUES, QUEUE_TOPOLOGY } from './index';
+import { DEAD_LETTER_PREFIX, deadLetterOf, QUEUE_TOPOLOGY, QUEUES } from './index';
 
 describe('队列拓扑', () => {
   it('队列名唯一且非空', () => {
@@ -27,8 +27,12 @@ describe('队列拓扑', () => {
       ]),
     );
     // 链路衔接正确
-    expect(QUEUE_TOPOLOGY.find((s) => s.queue === QUEUES.RAW_PRODUCT_EVENT)?.producer).toBe('collector-worker');
-    expect(QUEUE_TOPOLOGY.find((s) => s.queue === QUEUES.RAW_PRODUCT_EVENT)?.consumer).toBe('processor-worker');
+    expect(QUEUE_TOPOLOGY.find((s) => s.queue === QUEUES.RAW_PRODUCT_EVENT)?.producer).toBe(
+      'collector-worker',
+    );
+    expect(QUEUE_TOPOLOGY.find((s) => s.queue === QUEUES.RAW_PRODUCT_EVENT)?.consumer).toBe(
+      'processor-worker',
+    );
   });
 
   it('死信队列命名约定', () => {

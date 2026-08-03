@@ -37,8 +37,12 @@ export function parseTraceparent(header: string | undefined | null): { traceId: 
  * - 有合法父 traceId 则沿用（跨服务链路），否则生成新的；
  * - requestId 始终新生成（每个请求/任务独立）。
  */
-export function deriveTraceContext(parent?: TraceContext | { traceId?: string } | null): TraceContext {
+export function deriveTraceContext(
+  parent?: TraceContext | { traceId?: string } | null,
+): TraceContext {
   const traceId =
-    parent && parent.traceId && /^[0-9a-f]{16}$/.test(parent.traceId) ? parent.traceId : generateTraceId();
+    parent && parent.traceId && /^[0-9a-f]{16}$/.test(parent.traceId)
+      ? parent.traceId
+      : generateTraceId();
   return { requestId: randomUUID(), traceId };
 }

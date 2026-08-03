@@ -1,0 +1,8 @@
+docs/
+.github/
+.toolchain/
+dist/
+node_modules/
+pnpm-lock.yaml
+*.storage-state.json
+runtime/

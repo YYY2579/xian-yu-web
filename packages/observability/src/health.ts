@@ -30,7 +30,11 @@ export function aggregateHealth(checks: DependencyCheck[]): HealthReport {
 }
 
 /** 便捷构造单个依赖检查结果 */
-export function dependencyCheck(name: string, ok: boolean, options?: { detail?: string; latencyMs?: number }): DependencyCheck {
+export function dependencyCheck(
+  name: string,
+  ok: boolean,
+  options?: { detail?: string; latencyMs?: number },
+): DependencyCheck {
   return {
     name,
     status: ok ? 'ok' : 'down',

@@ -1,4 +1,4 @@
-import { createRawProductEvent, RawProductEventInput } from './raw-product-event';
+import { createRawProductEvent, type RawProductEventInput } from './raw-product-event';
 
 /**
  * 固定测试 fixture：合法 RawProductEvent 样例（契约测试与未来采集适配器测试共用）。

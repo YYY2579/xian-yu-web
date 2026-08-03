@@ -1,4 +1,4 @@
-import { KeywordMonitor, MonitorStatus, Prisma, PrismaClient } from '@prisma/client';
+import { type KeywordMonitor, type MonitorStatus, Prisma, type PrismaClient } from '@prisma/client';
 
 /**
  * 监控任务仓储（DB-002）
@@ -54,7 +54,10 @@ export class MonitorValidationError extends Error {
 
 /** 关键词归一化：去首尾空白、全角/连续空白折叠为半角空格、小写。 */
 export function normalizeKeyword(keyword: string): string {
-  return keyword.trim().replace(/[\s\u3000]+/g, ' ').toLowerCase();
+  return keyword
+    .trim()
+    .replace(/[\s\u3000]+/g, ' ')
+    .toLowerCase();
 }
 
 function assertNonNegativePrice(value: number | bigint): void {
@@ -99,7 +102,9 @@ export class MonitorRepository {
         keyword: input.keyword,
         normalizedKeyword: normalizeKeyword(input.keyword),
         targetPriceCent: input.targetPriceCent,
-        discountThreshold: new Prisma.Decimal(input.discountThreshold ?? DEFAULT_DISCOUNT_THRESHOLD).toFixed(4),
+        discountThreshold: new Prisma.Decimal(
+          input.discountThreshold ?? DEFAULT_DISCOUNT_THRESHOLD,
+        ).toFixed(4),
         minSampleSize: input.minSampleSize ?? DEFAULT_MIN_SAMPLE_SIZE,
         frequencyMinutes: input.frequencyMinutes,
         categoryCode: input.categoryCode,
@@ -168,7 +173,10 @@ export class MonitorRepository {
     const current = await this.findById(id);
     if (!current) throw new Error(`monitor ${id} not found`);
     const nextRunAt = new Date(Date.now() + current.frequencyMinutes * 60_000);
-    return this.prisma.keywordMonitor.update({ where: { id }, data: { status: 'ACTIVE', nextRunAt } });
+    return this.prisma.keywordMonitor.update({
+      where: { id },
+      data: { status: 'ACTIVE', nextRunAt },
+    });
   }
 
   /** 按状态与到期时间查询（调度器用，status 默认 ACTIVE） */
