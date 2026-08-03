@@ -89,3 +89,6 @@
 - 执行 PRI-002「实现低价规则引擎」完成：
   - evaluateLowPrice 纯函数（min(用户目标价, 市场×折扣) 公式；命中原因四态/score/riskScore/规则版本；样本不足仅用户阈值）。
   - 12 个单元测试；pricing-engine 26/26；五连全绿；提交 `951cb8e` 已推送。
+- 执行 API-001「初始化 NestJS API 应用」完成：
+  - NestJS 11 + TS7 装饰器兼容验证通过；main.ts（/api 前缀/CORS/ValidationPipe/Swagger /api/docs）+ 统一错误过滤器 + 请求 ID 拦截器 + /api/health（postgres/redis 依赖检查）。
+  - 集成测试 3 个；全仓 test/build 退出码 0；提交 `b77dba2` 已推送。
