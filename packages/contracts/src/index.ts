@@ -16,4 +16,5 @@ export {
   RAW_PRODUCT_EVENT_SCHEMA_VERSION,
   rawProductEventSchema,
 } from './events/raw-product-event';
+export type { CollectorJob } from './jobs/collector-job';
 export type { NormalizedProduct } from './products/normalized-product';

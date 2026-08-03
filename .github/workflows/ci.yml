@@ -40,7 +40,10 @@ jobs:
         run: pnpm format:check
 
       - name: Unit & integration tests
-        run: pnpm test
+        run: |
+          # scheduler 集成测试依赖 Redis（compose 提供）
+          docker compose -p xianyu up -d --wait redis
+          pnpm test
 
       - name: Build
         run: pnpm build
