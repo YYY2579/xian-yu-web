@@ -4,6 +4,8 @@ export {
   sonyCameraFixtureEvent,
   sonyCameraFixtureInput,
 } from './events/fixtures';
+export type { ProductObservedEvent } from './events/product-observed-event';
+export { PRODUCT_OBSERVED_EVENT_SCHEMA_VERSION } from './events/product-observed-event';
 export type {
   ParseResult,
   RawProductEvent,
