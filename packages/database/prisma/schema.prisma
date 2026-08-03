@@ -1,0 +1,43 @@
+// 闲鱼低价商品监控系统 - 数据库 Schema（DB-001）
+// 约定：金额一律整数分；时间一律 TIMESTAMPTZ（带时区）；主键 UUID。
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+/// 用户状态：正常 / 禁用 / 待验证
+enum UserStatus {
+  ACTIVE
+  DISABLED
+  PENDING_VERIFICATION
+}
+
+/// 套餐标识：免费 / 专业 / 企业
+enum PlanCode {
+  FREE
+  PRO
+  ENTERPRISE
+}
+
+/// 用户（5.1 users 表）
+/// 密码只保存强哈希（passwordHash）；软删除用 deletedAt，查询层默认过滤。
+model User {
+  id                     String             @id @default(uuid()) @db.Uuid
+  email                  String             @unique
+  passwordHash           String             @map("password_hash")
+  displayName            String?            @map("display_name")
+  status                 UserStatus         @default(ACTIVE)
+  planCode               PlanCode           @default(FREE) @map("plan_code")
+  timezone               String             @default("Asia/Shanghai")
+  notificationPreferences Json?             @map("notification_preferences")
+  createdAt              DateTime           @default(now()) @map("created_at") @db.Timestamptz(6)
+  updatedAt              DateTime           @updatedAt @map("updated_at") @db.Timestamptz(6)
+  deletedAt              DateTime?          @map("deleted_at") @db.Timestamptz(6)
+
+  @@index([planCode, status], map: "idx_users_plan_status")
+  @@map("users")
+}

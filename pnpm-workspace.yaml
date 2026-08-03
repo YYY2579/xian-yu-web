@@ -1,3 +1,12 @@
 packages:
   - 'apps/*'
   - 'packages/*'
+
+# pnpm 11 默认阻止依赖的 postinstall（supply-chain 安全）；Prisma 引擎需要执行 build scripts
+allowBuilds:
+  '@prisma/engines': true
+  'prisma': true
+  '@prisma/client': true
+  'esbuild': true
+  '@embedded-postgres/darwin-x64': true
+  'embedded-postgres': true
