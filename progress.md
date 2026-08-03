@@ -99,3 +99,6 @@
 - 执行 API-003「实现关键词监控任务 CRUD」完成：
   - monitors 模块（CRUD/pause/resume/分页 + AccessTokenGuard + DTO 校验 + 所有权隔离 404 + bigint→number）；NotificationRecord 外键级联 + 迁移。
   - 集成测试 8 个；api 19/19；五连全绿；提交 `40044fc` 已推送。
+- 执行 PRI-003「实现商品事件匹配监控任务」完成：
+  - LowPriceMatchEvent 契约；product-matcher（关键词匹配→基线→低价判定→可解释命中，未命中带原因）。
+  - 集成测试 5 个；analyzer-worker 6/6；五连全绿；提交 `e5b3cfe` 已推送。
