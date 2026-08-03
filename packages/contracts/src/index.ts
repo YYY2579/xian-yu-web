@@ -6,6 +6,7 @@ export {
   sonyCameraFixtureInput,
 } from './events/fixtures';
 export type { LowPriceMatchEvent } from './events/low-price-match-event';
+export type { NotificationCommand } from './events/notification-command';
 export type { ProductObservedEvent } from './events/product-observed-event';
 export { PRODUCT_OBSERVED_EVENT_SCHEMA_VERSION } from './events/product-observed-event';
 export type {

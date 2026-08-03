@@ -53,7 +53,11 @@ beforeAll(() => {
 });
 
 beforeEach(async () => {
+  await prisma.notificationRecord.deleteMany({});
+  await prisma.monitorRun.deleteMany({});
   await prisma.productPriceHistory.deleteMany({});
+  await prisma.notificationRecord.deleteMany({});
+  await prisma.monitorRun.deleteMany({});
   await prisma.product.deleteMany({});
 });
 

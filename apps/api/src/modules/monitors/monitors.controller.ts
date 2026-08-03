@@ -35,7 +35,7 @@ export class MonitorsController {
     @Query('page') page?: string,
     @Query('pageSize') pageSize?: string,
   ): Promise<MonitorPage> {
-    return this.monitors.list(request.userId!, Number(page ?? 1), Number(pageSize ?? 20));
+    return this.monitors.list(request.userId ?? '', Number(page ?? 1), Number(pageSize ?? 20));
   }
 
   @Post()
@@ -43,12 +43,12 @@ export class MonitorsController {
     @Req() request: AuthenticatedRequest,
     @Body() dto: CreateMonitorDto,
   ): Promise<MonitorView> {
-    return this.monitors.create(request.userId!, dto);
+    return this.monitors.create(request.userId ?? '', dto);
   }
 
   @Get(':id')
   async get(@Req() request: AuthenticatedRequest, @Param('id') id: string): Promise<MonitorView> {
-    return this.monitors.get(request.userId!, id);
+    return this.monitors.get(request.userId ?? '', id);
   }
 
   @Patch(':id')
@@ -57,13 +57,13 @@ export class MonitorsController {
     @Param('id') id: string,
     @Body() dto: UpdateMonitorDto,
   ): Promise<MonitorView> {
-    return this.monitors.update(request.userId!, id, dto);
+    return this.monitors.update(request.userId ?? '', id, dto);
   }
 
   @Post(':id/pause')
   @HttpCode(HttpStatus.OK)
   async pause(@Req() request: AuthenticatedRequest, @Param('id') id: string): Promise<MonitorView> {
-    return this.monitors.pause(request.userId!, id);
+    return this.monitors.pause(request.userId ?? '', id);
   }
 
   @Post(':id/resume')
@@ -72,12 +72,12 @@ export class MonitorsController {
     @Req() request: AuthenticatedRequest,
     @Param('id') id: string,
   ): Promise<MonitorView> {
-    return this.monitors.resume(request.userId!, id);
+    return this.monitors.resume(request.userId ?? '', id);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   async remove(@Req() request: AuthenticatedRequest, @Param('id') id: string): Promise<void> {
-    await this.monitors.remove(request.userId!, id);
+    await this.monitors.remove(request.userId ?? '', id);
   }
 }

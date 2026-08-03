@@ -2,12 +2,7 @@ import { execFileSync } from 'node:child_process';
 import path from 'node:path';
 import type { KeywordMonitor, PrismaClient } from '@prisma/client';
 import type { ProductObservedEvent } from '@xianyu/contracts';
-import {
-  BaselineRepository,
-  createPrismaClient,
-  MonitorRepository,
-  normalizeKeyword,
-} from '@xianyu/database';
+import { BaselineRepository, createPrismaClient, normalizeKeyword } from '@xianyu/database';
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 import { matchProduct } from './product-matcher';
 
@@ -18,7 +13,6 @@ const PG_DB = 'xianyu_test';
 const DATABASE_URL = `postgres://postgres:postgres@localhost:${PG_PORT}/${PG_DB}`;
 
 let prisma!: PrismaClient;
-let monitors: MonitorRepository;
 
 function makeObserved(overrides: Partial<ProductObservedEvent> = {}): ProductObservedEvent {
   return {
@@ -67,7 +61,7 @@ async function seedSampleProducts(keyword: string, prices: number[]): Promise<vo
         title: keyword,
         normalizedTitle: normalizeKeyword(keyword),
         url: `https://example.com/item/${i}`,
-        currentPriceCent: BigInt(prices[i]!),
+        currentPriceCent: BigInt(prices[i] ?? 0),
         lastSeenAt: new Date(now - i * 3600_000),
       },
     });
@@ -86,7 +80,6 @@ beforeAll(() => {
     stdio: 'ignore',
   });
   prisma = createPrismaClient(DATABASE_URL);
-  monitors = new MonitorRepository(prisma);
 });
 
 beforeEach(async () => {

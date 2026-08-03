@@ -53,8 +53,8 @@ beforeAll(async () => {
     env: { ...process.env },
     stdio: 'ignore',
   });
-  prisma = createPrismaClient(process.env.DATABASE_URL!);
-  redis = new Redis(process.env.REDIS_URL!);
+  prisma = createPrismaClient(process.env.DATABASE_URL ?? '');
+  redis = new Redis(process.env.REDIS_URL ?? '');
   const moduleRef = await Test.createTestingModule({ imports: [AppModule] }).compile();
   app = moduleRef.createNestApplication();
   app.setGlobalPrefix('api');
