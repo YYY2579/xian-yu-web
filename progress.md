@@ -92,3 +92,7 @@
 - 执行 API-001「初始化 NestJS API 应用」完成：
   - NestJS 11 + TS7 装饰器兼容验证通过；main.ts（/api 前缀/CORS/ValidationPipe/Swagger /api/docs）+ 统一错误过滤器 + 请求 ID 拦截器 + /api/health（postgres/redis 依赖检查）。
   - 集成测试 3 个；全仓 test/build 退出码 0；提交 `b77dba2` 已推送。
+- 执行 API-002「实现用户注册、登录和会话」完成：
+  - AuthService（bcrypt 哈希、access 15m/refresh 7d jti 可撤销+轮换、五端点）、AccessTokenGuard、登录限流（5 次/15 分钟锁定 429）。
+  - 关键发现：TS7 emitDecoratorMetadata 失效 → NestJS 全部注入需显式 @Inject；biome 需 unsafeParameterDecoratorsEnabled + api override。
+  - 集成测试 7 个；api 11/11；五连全绿；提交 `b6c83c5` 已推送。
