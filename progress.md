@@ -30,3 +30,7 @@
   - UserRepository：CRUD、软删除过滤、重复邮箱→EmailAlreadyExistsError；`createPrismaClient` 工厂（Prisma 7 driver adapter）。
   - PostgreSQL 本机方案落地：嵌入式 PG 16.4（embedded-postgres@16.4.0-beta.14），基建脚本 `packages/database/scripts/embedded-pg.mjs`（原生 initdb/pg_ctl，数据目录 /tmp/xianyu-pg，端口 55432）。
   - 验证：7 个集成测试在真实 PG 16.4 全部通过，全仓 typecheck/test 退出码 0；提交 `a718c26` 已推送。
+- 执行 DB-002「建立关键词监控任务数据模型」完成：
+  - KeywordMonitor 模型 + MonitorStatus 枚举，迁移 `20260803031321_add_keyword_monitors` 生成并应用（BIGINT 金额、DECIMAL(5,4) 阈值、JSONB 筛选、三索引、级联外键）。
+  - MonitorRepository：create/update/pause/resume/listByUser 分页/findByDue 到期查询；频率/阈值/样本/金额范围校验；normalizeKeyword 归一化。
+  - 集成测试 16/16（user 7 + monitor 9）；vitest `fileParallelism:false` 解决共享 DB 跨文件污染；提交 `c39e60f` 已推送。

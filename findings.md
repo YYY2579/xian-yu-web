@@ -74,3 +74,9 @@
 
 - `ps` / `pgrep` 被沙箱禁止（Operation not permitted）；进程诊断改用 `lsof`（可用）与端口 `net.connect` 探测。
 - CJS 编译目标下 tsc 禁止 `import.meta`（TS1470）；vitest 测试定位包根用 `process.cwd()`。
+
+### 集成测试基建补充（DB-002）
+
+- **vitest 多文件共享数据库必须串行**：vitest 默认并行执行 spec 文件，两个 spec 都 `deleteMany` 清库会互相污染（user 软删除测试被 monitor 的 beforeEach 干扰失败）。`vitest.config.ts` 设 `test.fileParallelism: false` 解决。
+- **Prisma Decimal 读取**：`DECIMAL(5,4)` 存储 `0.7000`，读取后 `toString()` 会去尾零（`'0.7'`）；断言用 `Number(decimal)` 或 `Decimal.equals()`。
+- **prisma generate 时机**：schema 变更后必须重新 `prisma generate`，否则生成的 client 缺新模型访问器（`keywordMonitor` 不存在）。

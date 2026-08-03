@@ -41,6 +41,7 @@
 | 6. FND-002 初始化 Monorepo 与包边界 | completed | 2026-08-03 完成：骨架、依赖、三连验证、git 推送。详见 progress.md。 |
 | 7. FND-003 建立配置与环境变量契约 | completed | 2026-08-03 完成：@xianyu/config schema 校验 + 脱敏 + .env.example + 运行手册，提交 df16b23。 |
 | 8. DB-001 建立用户与权限数据模型 | completed | 2026-08-03 完成：Prisma 7 users 表 + 迁移 + UserRepository + 嵌入式 PG 16.4 集成测试（7/7），提交 a718c26。 |
-| 9. 后续 P0 工单 | in_progress | 依赖已满足的下一个：**COL-001**（数据源适配器与事件契约，依赖 FND-001/FND-002✅）或 **DB-002**（监控任务模型，依赖 DB-001✅）。EXT-001 授权到位前 COL-002 保持 Blocked。 |
+| 9. DB-002 建立关键词监控任务数据模型 | completed | 2026-08-03 完成：KeywordMonitor + 迁移 + MonitorRepository + 16 个集成测试，提交 c39e60f。 |
+| 10. 后续 P0 工单 | in_progress | 依赖全部满足的下一个是 **COL-001**（数据源适配器与事件契约，依赖 FND-001/FND-002✅）。**DB-003 被 FND-004 阻塞**（需 Docker Compose，本机 docker 缺失；可后续用嵌入式 PG 论证替代或补做 compose 配置）。EXT-001 授权到位前 COL-002 保持 Blocked。 |
 
 执行规则：一次一个工单；开始前先查代码、未提交改动与依赖；完成后跑 typecheck/test/build，并更新 progress.md / findings.md / task_plan.md。
