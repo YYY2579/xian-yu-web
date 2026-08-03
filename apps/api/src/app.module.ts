@@ -5,9 +5,10 @@ import { RequestIdInterceptor } from './common/interceptors/request-id.intercept
 import { AuthModule } from './modules/auth/auth.module';
 import { HealthModule } from './modules/health/health.module';
 import { MonitorsModule } from './modules/monitors/monitors.module';
+import { ProductsModule } from './modules/products/products.module';
 
 @Module({
-  imports: [HealthModule, AuthModule, MonitorsModule],
+  imports: [HealthModule, AuthModule, MonitorsModule, ProductsModule],
   providers: [
     { provide: APP_FILTER, useClass: AllExceptionsFilter },
     { provide: APP_INTERCEPTOR, useClass: RequestIdInterceptor },

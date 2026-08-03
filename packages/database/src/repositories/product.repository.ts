@@ -95,6 +95,28 @@ export class ProductRepository {
     return this.prisma.product.findUnique({ where: { canonicalKey }, select: DEFAULT_SELECT });
   }
 
+  /** 按关键词（归一化标题包含）分页查询商品（API-004） */
+  async findByKeywordPaginated(
+    keyword: string,
+    page = 1,
+    pageSize = 20,
+  ): Promise<{ items: ProductWithoutRawPayload[]; total: number; page: number; pageSize: number }> {
+    const safePage = Math.max(1, Math.trunc(page));
+    const safeSize = Math.min(100, Math.max(1, Math.trunc(pageSize)));
+    const where = { normalizedTitle: { contains: keyword.toLowerCase() } };
+    const [items, total] = await this.prisma.$transaction([
+      this.prisma.product.findMany({
+        where,
+        orderBy: { lastSeenAt: 'desc' },
+        select: DEFAULT_SELECT,
+        skip: (safePage - 1) * safeSize,
+        take: safeSize,
+      }),
+      this.prisma.product.count({ where }),
+    ]);
+    return { items, total, page: safePage, pageSize: safeSize };
+  }
+
   /** 内部审计用：含 raw_payload（默认查询不可见） */
   async findWithRawPayload(id: string): Promise<Product | null> {
     return this.prisma.product.findUnique({ where: { id } });

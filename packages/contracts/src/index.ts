@@ -29,3 +29,4 @@ export type {
   UpdateMonitorRequest,
 } from './monitors/monitor.types';
 export type { NormalizedProduct } from './products/normalized-product';
+export type { NotificationView, PricePointView, ProductView } from './products/product-views';
