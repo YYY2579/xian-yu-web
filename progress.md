@@ -83,3 +83,6 @@
   - scripts/migrate.ts（幂等 deploy+generate，Node 24 直跑）+ scripts/seed.ts（测试种子，环境守卫仅 test/development）；package.json db:migrate/db:seed。
   - pg_trgm 扩展 + products.normalized_title GIN 索引迁移。
   - docs/runbooks/database.md；验证：空库从零迁移（8 表/5 迁移）、升级幂等、索引存在、种子守卫；提交 `26b9c56` 已推送。
+- 执行 PRI-001「实现可比样本查询与市场价基线」完成：
+  - baseline-calculator 纯函数（中位数/四分位线性插值/IQR 剔除/样本不足 insufficient/置信度/规则版本）；BaselineRepository（近 7 天窗口 + 关键词 trgm 匹配 + 排除自身）。
+  - 测试：calculator 8 单元 + repository 3 集成（含端到端基线）；五连全绿；提交 `d7a78fc` 已推送。
