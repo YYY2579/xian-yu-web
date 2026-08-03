@@ -107,3 +107,9 @@
 - **prettier 不支持 YAML**：`format:check` 会因 docker-compose.yml/ci.yml 报错，需在 `.prettierignore` 排除 `*.yml/*.yaml`（`biome` 也不检查 yaml）。
 - **compose healthcheck 密码透传**：redis 容器 healthcheck 中 `$${REDIS_PASSWORD:-default}` 是容器内展开；若用户通过 `.env` 覆盖密码，必须把 `REDIS_PASSWORD` 也注入容器 `environment`，否则 healthcheck 与 `--requirepass` 失配。
 - **GitHub Actions `on:` 键**：YAML 1.1 解析器（如 Ruby psych）会把 `on` 解析为布尔 `true`，GitHub 运行环境按 YAML 1.2 正确处理，属已知差异无需处理。
+
+### Prisma JSON 字段（DB-003）
+
+- **null vs JsonNull**：Prisma JSON 字段不接受顶层 `null`（类型上需 `NullableJsonNullValueInput`）；清空 JSON 字段用 `Prisma.JsonNull`（SQL NULL），create/update 的 data 里要显式转换（`input.rawPayload ?? Prisma.JsonNull`）。
+- **Prisma 7 migrate dev 不自动重新 generate client**：schema 变更后必须手动 `prisma generate`，否则新模型访问器（`product`/`productPriceHistory`）不存在。
+- **Biome useNodejsImportProtocol**：强制 `node:` 前缀（`node:crypto`/`node:stream`）；TS7 在 `types:["node"]` 配置下可正确解析 `node:` 协议（此前 TS2591 是缺 types 配置所致）。

@@ -52,3 +52,7 @@
   - docker-compose.yml：postgres:16（init.sql 建 xianyu_test）/ redis:7（密码化）/ rabbitmq:3-management（管理台），健康检查 + 持久化卷 + xianyu-dev 网络，密码 .env 可覆盖。
   - infra/compose/README.md 连接说明；CI 新增 infra job（ubuntu 上 up -d --wait 验证三服务 healthy），弥补本机无 docker 的验收缺口。
   - YAML 经 Ruby psych 校验；修复 redis healthcheck 密码透传缺陷；提交 `670a204` 已推送。FND-004 完成后 DB-003/COL-003 依赖链解锁。
+- 执行 DB-003「建立商品与价格历史数据模型」完成：
+  - Product（canonical_key 唯一去重、金额 BIGINT、raw_payload 访问边界）+ ProductPriceHistory（source_event_id 幂等键、observed_at 倒序索引、月度分区预留），迁移 `20260803033804_add_products_and_price_history`。
+  - ProductRepository（upsert 去重/查询/审计）+ PriceHistoryRepository（幂等记录/时间范围倒序）。
+  - 集成测试 26/26（新增 10 个）；五连验证全绿；biome 自动修复 node: 协议导入；提交 `1ebad0a` 已推送。
