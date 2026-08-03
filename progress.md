@@ -56,3 +56,7 @@
   - Product（canonical_key 唯一去重、金额 BIGINT、raw_payload 访问边界）+ ProductPriceHistory（source_event_id 幂等键、observed_at 倒序索引、月度分区预留），迁移 `20260803033804_add_products_and_price_history`。
   - ProductRepository（upsert 去重/查询/审计）+ PriceHistoryRepository（幂等记录/时间范围倒序）。
   - 集成测试 26/26（新增 10 个）；五连验证全绿；biome 自动修复 node: 协议导入；提交 `1ebad0a` 已推送。
+- 执行 DB-004「建立通知、任务运行与审计数据模型」完成：
+  - NotificationRecord（idempotency_key 唯一、投递状态枚举、retry_count 自增、三索引）+ MonitorRun + AuditLog（仅追加只读），迁移 `20260803034433_add_notifications_runs_audit`。
+  - 三个 Repository（幂等/状态流转/重试计数/用户隔离；run start/finish；audit 只读约束）。
+  - 集成测试 37/37（新增 11 个）；五连全绿；提交 `fab8cc7` 已推送。
