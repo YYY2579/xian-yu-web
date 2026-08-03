@@ -86,3 +86,6 @@
 - 执行 PRI-001「实现可比样本查询与市场价基线」完成：
   - baseline-calculator 纯函数（中位数/四分位线性插值/IQR 剔除/样本不足 insufficient/置信度/规则版本）；BaselineRepository（近 7 天窗口 + 关键词 trgm 匹配 + 排除自身）。
   - 测试：calculator 8 单元 + repository 3 集成（含端到端基线）；五连全绿；提交 `d7a78fc` 已推送。
+- 执行 PRI-002「实现低价规则引擎」完成：
+  - evaluateLowPrice 纯函数（min(用户目标价, 市场×折扣) 公式；命中原因四态/score/riskScore/规则版本；样本不足仅用户阈值）。
+  - 12 个单元测试；pricing-engine 26/26；五连全绿；提交 `951cb8e` 已推送。
