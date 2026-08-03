@@ -100,3 +100,10 @@
 - **供应链风险实例**：npm 上 `biome@0.3.3` 是可疑包（依赖 core-js 2.x 老依赖，官方包名为 `@biomejs/biome`），已移除。**装新工具前先核对官方包名**。
 - **.mjs 是纯 JS**：不要写 TS 类型注解（Node 与 prettier 都会语法报错）。
 - **CI 集成测试**：embedded-postgres 提供 linux-x64 二进制（optionalDependencies 按平台装），ubuntu runner 可直接跑数据库集成测试；`git diff --exit-code` 步骤防止未提交的生成物。
+
+### Compose 基建要点（FND-004）
+
+- **本机无 docker 的 YAML 校验**：python3 无 yaml 模块，用 macOS 自带 Ruby `psych`（`YAML.load_file`）校验 compose/CI 文件；容器健康验收交给 CI infra job。
+- **prettier 不支持 YAML**：`format:check` 会因 docker-compose.yml/ci.yml 报错，需在 `.prettierignore` 排除 `*.yml/*.yaml`（`biome` 也不检查 yaml）。
+- **compose healthcheck 密码透传**：redis 容器 healthcheck 中 `$${REDIS_PASSWORD:-default}` 是容器内展开；若用户通过 `.env` 覆盖密码，必须把 `REDIS_PASSWORD` 也注入容器 `environment`，否则 healthcheck 与 `--requirepass` 失配。
+- **GitHub Actions `on:` 键**：YAML 1.1 解析器（如 Ruby psych）会把 `on` 解析为布尔 `true`，GitHub 运行环境按 YAML 1.2 正确处理，属已知差异无需处理。

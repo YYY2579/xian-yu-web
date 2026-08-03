@@ -48,3 +48,7 @@
   - embedded-pg.mjs 平台适配（darwin/linux/win32），CI(ubuntu) 集成测试可用。
   - ⚠️ 供应链：npm `biome@0.3.3` 为可疑包（依赖 core-js 2.x）已移除，改用官方 `@biomejs/biome`。
   - 本地五连验证退出码全 0；提交 `11ebdef` 已推送。
+- 执行 FND-004「建立本地 Docker Compose 基础设施」完成：
+  - docker-compose.yml：postgres:16（init.sql 建 xianyu_test）/ redis:7（密码化）/ rabbitmq:3-management（管理台），健康检查 + 持久化卷 + xianyu-dev 网络，密码 .env 可覆盖。
+  - infra/compose/README.md 连接说明；CI 新增 infra job（ubuntu 上 up -d --wait 验证三服务 healthy），弥补本机无 docker 的验收缺口。
+  - YAML 经 Ruby psych 校验；修复 redis healthcheck 密码透传缺陷；提交 `670a204` 已推送。FND-004 完成后 DB-003/COL-003 依赖链解锁。
