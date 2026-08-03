@@ -10,6 +10,8 @@ import { Prisma, type PrismaClient, type Product } from '@prisma/client';
 export type UpsertProductInput = {
   source: string;
   sourceProductId: string;
+  /** 覆盖 canonical_key（无稳定 ID 时用受控指纹）；默认 source:sourceProductId */
+  canonicalKey?: string;
   title: string;
   normalizedTitle: string;
   url: string;
@@ -55,7 +57,8 @@ export class ProductRepository {
 
   /** 按 canonical_key upsert：重复采集只更新当前字段与 lastSeenAt（原子 ON CONFLICT） */
   async upsert(input: UpsertProductInput): Promise<Product> {
-    const canonicalKey = buildCanonicalKey(input.source, input.sourceProductId);
+    const canonicalKey =
+      input.canonicalKey ?? buildCanonicalKey(input.source, input.sourceProductId);
     const lastSeenAt = new Date();
     return this.prisma.product.upsert({
       where: { canonicalKey },
