@@ -11,3 +11,12 @@
 - 架构决策：采用 Playwright 作为 `datasource-sdk` 的浏览器执行层；使用独立 BrowserContext、受控 storageState、fixture/mock 测试和有限超时/重试；禁止验证码/风控绕过、账号池、代理池、签名逆向、自动下单和抢拍。
 - 已创建：`docs/open-source/xianyu-open-source-evaluation.md`、`docs/adr/ADR-005-playwright-collector.md`、`docs/ai-collaboration/deepseek-development-prompt.md`。
 - 已同步更新技术方案和开发工单中的 Playwright 约束与 COL-002 验收方法。
+
+## 2026-08-03（执行期）
+
+- 执行 FND-002「初始化 Monorepo 与包边界」完成：
+  - pnpm workspace 根配置 + 14 个子包骨架（6 apps + 8 packages），统一 devDependencies（typescript ^7.0.2 / vitest ^4.1.10 / @types/node ^26.1.2）。
+  - 验证全绿：typecheck / test（14 包 × 1 测试）/ build（84 个产物文件）退出码均为 0。
+  - 工具链：brew 因 `/usr/local` 属 root 且 sudo 被禁不可行；bash 沙箱禁止写 HOME → node v24.18.1 + npm 11.16.0 + pnpm 11.18.0 安装至 workspace 内 `.toolchain/`（已 gitignore），npm/pnpm 状态经 `.toolchain/env.sh` 重定向。
+  - 兼容修复：TS7 移除 `moduleResolution=Node`（改 NodeNext）；`outDir/rootDir` 改用 `${configDir}` 在子包 tsconfig 显式声明；vitest 4 纯 ESM → 每包 `vitest.config.ts` 限定 `src/**/*.spec.ts`。
+  - Git：`git init -b main`，初始提交 `e1cc54f`（84 文件），已推送 `git@github.com:YYY2579/xian-yu-web.git`（origin/main）。

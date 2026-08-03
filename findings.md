@@ -35,3 +35,19 @@
 2. “可以直接拿来做生产底座”也不成立：现有项目大多是个人工具，采集、登录态、UI、推送和本地存储耦合，且经常涉及浏览器自动化和账号操作。
 3. 推荐路线是自建本项目的合规数据源适配层、领域模型、价格规则、队列、通知幂等和多租户 API；仅参考开源项目的 UI 交互、字段命名、事件类型、通知模板和本地开发体验。
 4. 任何复制代码前必须确认仓库 LICENSE、依赖许可证、第三方资源和代码来源，并记录到 ADR；不得复制反爬绕过、验证码绕过、账号池、代理轮换或自动下单实现。
+
+## 执行期发现（2026-08-03，FND-002）
+
+### 本机环境约束（影响所有后续工单）
+
+- bash 工具沙箱只允许写 workspace 与 `/tmp`；HOME（`~/`、`~/.local`）只读（EPERM）；`sudo` 被禁（Operation not permitted）。
+- `/usr/local` 属 root:wheel → Homebrew 安装不可行。
+- 结论：工具链与所有 npm/pnpm 状态放 workspace 内 `.toolchain/`（已 gitignore）；npm cache、pnpm store、XDG 目录经 `.toolchain/env.sh` 重定向；registry 用 npmmirror 镜像。
+- git 身份通过环境变量 `GIT_AUTHOR_*/GIT_COMMITTER_*` 提供（`YYY2579` + GitHub noreply 邮箱），不写全局 config。
+
+### TypeScript 7 / vitest 4 兼容坑
+
+- TS7 移除 `moduleResolution: "Node"`（node10）→ 改用 NodeNext。
+- `outDir/rootDir` 相对「声明处 tsconfig」解析：基线里写 `outDir: dist` 会让产物全部落到根 `dist/` → 各子包 tsconfig 必须用 `${configDir}/src`、`${configDir}/dist` 显式覆盖。
+- vitest 4 为纯 ESM：CJS 产物（`dist/*.spec.js`）被默认匹配后会报 "cannot be imported in CommonJS" → 每包 `vitest.config.ts` 限定 `include: ['src/**/*.spec.ts']`。
+- 版本约定：node >=24（.nvmrc=24），packageManager `pnpm@11.18.0`。
