@@ -60,3 +60,6 @@
   - NotificationRecord（idempotency_key 唯一、投递状态枚举、retry_count 自增、三索引）+ MonitorRun + AuditLog（仅追加只读），迁移 `20260803034433_add_notifications_runs_audit`。
   - 三个 Repository（幂等/状态流转/重试计数/用户隔离；run start/finish；audit 只读约束）。
   - 集成测试 37/37（新增 11 个）；五连全绿；提交 `fab8cc7` 已推送。
+- 执行 PROC-001「实现商品字段标准化解析器」完成：
+  - contracts 新增 NormalizedProduct 类型（含审计保留字段）；processor-worker 新增 normalizer 纯函数（防御性拒绝/标题空白折叠+归一化/canonical_key/原始价格文本提取/warnings）。
+  - 9 个单元测试全绿；五连验证通过；提交 `3f40710` 已推送。
