@@ -49,6 +49,7 @@ model User {
   @@map("users")
 
   monitors KeywordMonitor[]
+  notifications NotificationRecord[]
 }
 
 /// 关键词监控任务（5.2 keyword_monitors 表）
@@ -77,6 +78,89 @@ model KeywordMonitor {
   @@index([status, nextRunAt], map: "idx_monitors_status_next_run")
   @@index([normalizedKeyword], map: "idx_monitors_normalized_keyword")
   @@map("keyword_monitors")
+
+  runs MonitorRun[]
+  notifications NotificationRecord[]
+}
+
+/// 通知投递状态：待发送 / 已发送 / 失败（可重试）/ 死信 / 抑制
+enum NotificationDeliveryStatus {
+  PENDING
+  SENT
+  FAILED
+  DEAD
+  SUPPRESSED
+}
+
+/// 任务运行状态
+enum MonitorRunStatus {
+  RUNNING
+  SUCCESS
+  FAILED
+}
+
+/// 通知记录（5.5 notification_records 表）
+/// idempotency_key 唯一：同一商品/规则/用户窗口不重复通知；
+/// retry_count 记录失败重试次数；delivery_status 驱动重试与死信。
+model NotificationRecord {
+  id               String                      @id @default(uuid()) @db.Uuid
+  userId           String                      @map("user_id") @db.Uuid
+  user             User                        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  monitorId        String                      @map("monitor_id") @db.Uuid
+  monitor          KeywordMonitor              @relation(fields: [monitorId], references: [id])
+  productId        String                      @map("product_id") @db.Uuid
+  product          Product                     @relation(fields: [productId], references: [id])
+  channel          String
+  eventType        String                      @map("event_type")
+  ruleVersion      String                      @map("rule_version")
+  productPriceCent BigInt                      @map("product_price_cent")
+  marketPriceCent  BigInt?                     @map("market_price_cent")
+  discountRate     Decimal?                    @map("discount_rate") @db.Decimal(6, 4)
+  reason           Json?
+  idempotencyKey   String                      @unique @map("idempotency_key")
+  deliveryStatus   NotificationDeliveryStatus  @default(PENDING) @map("delivery_status")
+  providerMessageId String?                    @map("provider_message_id")
+  retryCount       Int                         @default(0) @map("retry_count")
+  sentAt           DateTime?                   @map("sent_at") @db.Timestamptz(6)
+  createdAt        DateTime                    @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@index([userId, createdAt(sort: Desc)], map: "idx_notif_user_created")
+  @@index([monitorId, createdAt(sort: Desc)], map: "idx_notif_monitor_created")
+  @@index([deliveryStatus], map: "idx_notif_delivery_status")
+  @@map("notification_records")
+}
+
+/// 任务运行记录（推荐补充表 monitor_runs）
+model MonitorRun {
+  id           BigInt            @id @default(autoincrement())
+  monitorId    String            @map("monitor_id") @db.Uuid
+  monitor      KeywordMonitor    @relation(fields: [monitorId], references: [id], onDelete: Cascade)
+  status       MonitorRunStatus
+  startedAt    DateTime          @default(now()) @map("started_at") @db.Timestamptz(6)
+  finishedAt   DateTime?         @map("finished_at") @db.Timestamptz(6)
+  resultCount  Int               @default(0) @map("result_count")
+  errorMessage String?           @map("error_message")
+  durationMs   Int?              @map("duration_ms")
+
+  @@index([monitorId, startedAt(sort: Desc)], map: "idx_run_monitor_started")
+  @@map("monitor_runs")
+}
+
+/// 管理/审计日志（推荐补充表 audit_logs）
+/// 仅支持追加与只读查询，不提供修改/删除（普通用户 API 不可触达）。
+model AuditLog {
+  id           BigInt  @id @default(autoincrement())
+  actorId      String? @map("actor_id") @db.Uuid
+  action       String
+  resourceType String  @map("resource_type")
+  resourceId   String? @map("resource_id")
+  detail       Json?
+  ip           String?
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz(6)
+
+  @@index([resourceType, resourceId], map: "idx_audit_resource")
+  @@index([actorId, createdAt(sort: Desc)], map: "idx_audit_actor_created")
+  @@map("audit_logs")
 }
 
 /// 商品主记录（5.3 products 表）
@@ -104,6 +188,7 @@ model Product {
   updatedAt        DateTime              @updatedAt @map("updated_at") @db.Timestamptz(6)
 
   priceHistory ProductPriceHistory[]
+  notifications NotificationRecord[]
 
   @@index([source, sourceProductId], map: "idx_products_source_prod")
   @@map("products")
