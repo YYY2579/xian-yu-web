@@ -96,3 +96,6 @@
   - AuthService（bcrypt 哈希、access 15m/refresh 7d jti 可撤销+轮换、五端点）、AccessTokenGuard、登录限流（5 次/15 分钟锁定 429）。
   - 关键发现：TS7 emitDecoratorMetadata 失效 → NestJS 全部注入需显式 @Inject；biome 需 unsafeParameterDecoratorsEnabled + api override。
   - 集成测试 7 个；api 11/11；五连全绿；提交 `b6c83c5` 已推送。
+- 执行 API-003「实现关键词监控任务 CRUD」完成：
+  - monitors 模块（CRUD/pause/resume/分页 + AccessTokenGuard + DTO 校验 + 所有权隔离 404 + bigint→number）；NotificationRecord 外键级联 + 迁移。
+  - 集成测试 8 个；api 19/19；五连全绿；提交 `40044fc` 已推送。
