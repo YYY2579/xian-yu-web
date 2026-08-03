@@ -67,3 +67,6 @@
 - 执行 PROC-002「实现非交易商品过滤规则」完成：
   - excluded-terms 六分类词典 + NON_TRADE_FILTER_VERSION=1；non-trade-filter 纯函数（命中拒绝 + 可解释原因 + 分类词可配置覆盖）。
   - 正负样本测试（不误删/六分类拒绝/版本/覆盖）；五连全绿；提交 `a454f55` 已推送。
+- 执行 COL-003「实现调度任务选择、分布式锁和配额检查」完成：
+  - CollectorJob 契约；DistributedLock（Redis NX+PX+Lua owner 校验+TTL）；QuotaManager（固定窗口）；SchedulerService（到期选择→加锁→配额→产出 job，跳过原因可观测）。
+  - 8 个集成测试（docker Redis + 嵌入式 PG）全绿；CI test job 启动 compose redis；提交 `29a27de` 已推送。
