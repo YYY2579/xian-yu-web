@@ -73,3 +73,6 @@
 - 执行 PROC-003「实现商品去重与主记录更新」完成：
   - ProductDeduplicator（source+ID 优先 / 稳定指纹 SHA-256（标题+卖家+地区）/ 原子 upsert 并发安全）；upsert 支持 canonicalKey 覆盖。
   - 5 个集成测试全绿（重复事件/并发合并/指纹合并与不误合并/来源 ID 变化）；五连全绿；提交 `70dbdc2` 已推送。
+- 执行 PROC-004「实现价格历史写入与事件幂等」完成：
+  - ProductObservedEvent 契约；PriceHistoryHandler（source_event_id 幂等写入 + 观察事件产出，幂等即补偿策略）。
+  - 5 个集成测试全绿（幂等/不同价格时间/批量/失败回滚）；processor-worker vitest 串行；五连全绿；提交 `4902ef3` 已推送。
