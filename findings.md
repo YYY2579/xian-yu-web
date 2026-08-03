@@ -87,3 +87,9 @@
 - **workspace 包消费**：包的 `main/types` 指向 `dist`，上游包 import 时需先 `pnpm --filter <pkg> build` 生成 dist（开发期可用 tsc watch 或后续 vitest alias 优化）。
 - **spec 相对导入**：`src/*.spec.ts` 引用自身模块用 `./index`，`src/repositories/*.spec.ts` 才用 `../index`。
 - **noUncheckedIndexedAccess**：数组索引访问（`products[0]`）需非空断言 `!`。
+
+### 可观测性实现要点（FND-006）
+
+- **pino redact**：`redact: { paths, censor }` 支持 `**password**` 等通配路径，实现任意层级的敏感字段脱敏；`base: undefined` 可去掉默认 pid/hostname 保持精简。
+- **prom-client 15**：`new Counter({ registers: [registry] })` 方式共享 Registry；重复创建同名指标会抛错，需按名称缓存复用实例。
+- **traceparent**：W3C 格式 `00-<traceid>-<parentid>-<flags>`；MVP 用 16 位 hex traceId，解析时对更长 id 截断，接口后续可平滑迁移 OTel。

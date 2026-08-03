@@ -43,6 +43,7 @@
 | 8. DB-001 建立用户与权限数据模型 | completed | 2026-08-03 完成：Prisma 7 users 表 + 迁移 + UserRepository + 嵌入式 PG 16.4 集成测试（7/7），提交 a718c26。 |
 | 9. DB-002 建立关键词监控任务数据模型 | completed | 2026-08-03 完成：KeywordMonitor + 迁移 + MonitorRepository + 16 个集成测试，提交 c39e60f。 |
 | 10. COL-001 定义数据源适配器和领域事件契约 | completed | 2026-08-03 完成：RawProductEvent 契约 + DatasourceAdapter 接口 + 队列拓扑 + 15 个测试，提交 a149a4c。 |
-| 11. 后续 P0 工单 | in_progress | 可执行候选：**FND-006**（observability 日志/健康检查/链路追踪，依赖 FND-003✅，纯代码可完整验证）、**FND-005**（CI 基线，依赖 FND-002✅）、**FND-004**（Docker Compose 配置，本机 docker 缺失验收受限）。DB-003/API-001 依赖链仍被 FND-004 阻塞；COL-002 被 EXT-001 阻塞。 |
+| 11. FND-006 建立日志、健康检查和链路追踪基线 | completed | 2026-08-03 完成：observability 包（logger/tracing/metrics/health）+ 11 个测试，提交 1004be2。 |
+| 12. 后续 P0 工单 | in_progress | 可执行候选：**FND-005**（CI 基线：eslint/prettier/vitest + GitHub Actions，依赖 FND-002✅）、**FND-004**（Docker Compose 配置，本机 docker 缺失验收受限）、FND-001 剩余（ADR-001/ADR-002 补写）。DB-003/API-001 依赖链仍被 FND-004 阻塞；COL-002 被 EXT-001 阻塞。 |
 
 执行规则：一次一个工单；开始前先查代码、未提交改动与依赖；完成后跑 typecheck/test/build，并更新 progress.md / findings.md / task_plan.md。

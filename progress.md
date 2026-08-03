@@ -39,3 +39,6 @@
   - DatasourceAdapter 接口（只输出 RawProductEvent；DatasourceError 七类错误 + retryable 规则；healthCheck/close）；queue 拓扑（5 队列 + dlq + 生产者/消费者映射）。
   - tsconfig.base.json 加 types:["node"]（TS7 需显式 @types）；contracts 构建后才可被 workspace 消费。
   - 测试：contracts 7 + sdk 4 + queue 4 全绿，全仓 typecheck/test 退出码 0；提交 `a149a4c` 已推送。
+- 执行 FND-006「建立日志、健康检查和链路追踪基线」完成：
+  - @xianyu/observability：JSON 日志（pino + 敏感字段全层级脱敏 + child 上下文 + level 过滤）、trace_id/request_id 与 W3C traceparent（预留 OTel 演进）、prom-client 指标（Prometheus 文本导出 + 业务指标清单）、健康检查（应用/依赖区分聚合）。
+  - 依赖 pino ^10.3.1、prom-client ^15.1.3；11 个测试全绿，全仓 typecheck/test 退出码 0；提交 `1004be2` 已推送。
